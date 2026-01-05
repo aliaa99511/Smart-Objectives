@@ -1,0 +1,7 @@
+{
+  "siteUrl": "http://172.191.7.149:9352",
+  "strategy": "OnpremiseUserCredentials",
+  "username": "department.manager",
+  "password": "04686bcd4aa3a6faa35ed58611d0fec1bc9e367035ee8812195e317a30d27ae7035da2a6b72a18c4ccfa6968f143312c/IE8pJIpHfduGHIAd3B7QQ==",
+  "domain": "Dev.azure"
+}

@@ -1,0 +1,115 @@
+.formContainer form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formTitle {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lable {
+  font-weight: 600;
+  font-size: 12px;
+
+  color: #686868;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 16px;
+}
+
+.radioLabel {
+  margin: 0 !important;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  flex: 1;
+}
+.radioLabel span:last-child {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 168%;
+  letter-spacing: 0.15px;
+}
+
+.achievedRadio {
+  background-color: #e8f6e8;
+  border-color: rgba(76, 175, 80, 0.5);
+  color: #37a52d;
+}
+
+.notAchievedRadio {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-color: rgba(244, 67, 54, 0.5);
+  color: #ef3535;
+}
+
+.commentField textarea {
+  text-transform: none !important;
+}
+
+.certificateNameField {
+  margin-bottom: 8px;
+}
+
+.uploadContainer {
+  margin-bottom: 16px;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.fileUploadContainer {
+  position: relative;
+  padding: 8px 0px;
+  border-radius: 6px;
+}
+
+.uploadFile {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 999;
+}
+.fileItemContent,
+.fileItemContentText {
+  max-width: calc(100% - 50px);
+}
+
+.addCertificateButton {
+  background-color: #f3f1fa !important;
+  color: #705ccf !important;
+  width: 100% !important;
+  text-align: center !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 25px 0px;
+}
+.noteHelper {
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: initial;
+  color: #686868;
+}
+.noteHelper span {
+  font-weight: 700;
+}

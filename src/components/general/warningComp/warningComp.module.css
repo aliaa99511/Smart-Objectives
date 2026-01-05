@@ -1,0 +1,24 @@
+.iconWrapper {
+  background-color: #ffe2e2;
+  border: 8px solid #fff3f3;
+  width: 135px;
+  height: 135px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.icon {
+  color: #df1f1f;
+  font-size: 32px;
+}
+
+.title {
+  color: #272727;
+  margin-bottom: 32px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+}

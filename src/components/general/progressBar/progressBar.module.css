@@ -1,0 +1,39 @@
+.progressBar {
+  background: #f4f1fd;
+  height: 10px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.spaceTop {
+  margin-top: 1.5rem;
+}
+
+.progress {
+  background: var(--primary-color);
+  height: 10px;
+  border-radius: 4px;
+}
+
+.progressNumber {
+  position: absolute;
+  top: -22px;
+  background-color: #f4f1fd;
+  color: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 10px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 8px;
+}
+.progressNumber::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top: 5px solid #f4f1fd;
+}

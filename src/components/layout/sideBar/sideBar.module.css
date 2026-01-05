@@ -1,0 +1,84 @@
+.sidebar {
+  border-right: var(--gray-color-l) 1px solid;
+  height: 100%;
+}
+.sideBarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0px 10px;
+  border-bottom: 1px solid var(--gray-color-l);
+  height: 100px;
+  gap: 16px;
+  padding: 16px 32px;
+}
+.linksContainer {
+  padding: 10px 5px;
+}
+.sideBarCont {
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.navigationBtn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.navigationBtn {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.sideBarLinks {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.link,
+.parentAccordion,
+.childLink {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-transform: capitalize;
+  width: 100%;
+  align-content: center;
+  gap: 20px;
+  padding: 16px 20px;
+  color: #272727;
+  position: relative;
+}
+.childLink {
+  padding: 16px 25px;
+  color: #655a6d;
+}
+.link:not(:last-child),
+.childLink:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.link.active {
+  color: var(--primary-color-d);
+  border-radius: 8px;
+  background-color: var(--primary-color-l) !important;
+}
+.link.pendingRequest::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-color-d);
+  border-radius: 50%;
+}

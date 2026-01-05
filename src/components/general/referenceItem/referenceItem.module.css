@@ -1,0 +1,37 @@
+.referenceItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #fcfbfc;
+  border-radius: 6px;
+  padding: 10px 16px;
+  max-width: 100%;
+}
+.referenceLink {
+  color: #0066cc;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 40px);
+  display: block;
+  text-decoration: underline !important;
+
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.15px;
+  text-transform: lowercase;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-offset: 0%;
+  text-decoration-thickness: 0%;
+}
+
+.deleteButton {
+  color: #bebdbe !important;
+}
+
+.deleteButton:hover {
+  color: #d32f2f !important;
+}

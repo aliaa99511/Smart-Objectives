@@ -1,0 +1,81 @@
+.card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 24px 16px;
+  border: 1px solid #f6f5f7;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card:hover,
+.activeCard {
+  border: 1px solid #c0b8e9;
+}
+
+.menuButton {
+  padding: 8px !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+}
+.menuButton svg {
+  font-size: 20px !important;
+}
+.activeBtn svg {
+  color: #4e3da3 !important;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.content {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.name {
+  font-weight: 600 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px !important;
+  color: #272727;
+}
+
+.jobTitle {
+  color: #72757c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500 !important;
+  font-size: 10px !important;
+}
+
+.stat {
+  width: 90px;
+  height: 24px;
+  background-color: #f3f1fc;
+  color: #4e3da3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+
+  font-weight: 500;
+  font-size: 10px;
+}
+.menuItem {
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  /* font-size: 10px !important; */
+  text-transform: capitalize !important;
+}
+.menuItem:hover {
+  border-radius: 6px !important;
+  background-color: #f3f1fc !important;
+  color: #4e3da3 !important;
+}

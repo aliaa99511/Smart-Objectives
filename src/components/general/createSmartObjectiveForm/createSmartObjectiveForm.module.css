@@ -1,0 +1,145 @@
+.inputTitle {
+  font-size: 12px !important;
+  line-height: 24px !important;
+  color: #686868;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px !important;
+  margin-top: 6px !important;
+  text-transform: capitalize !important;
+}
+.inputTitle span {
+  font-weight: 400;
+  font-size: 12px;
+  /* font-size: 10px; */
+  text-transform: lowercase;
+}
+
+.formControl {
+  all: unset;
+  /* min-height: 70px !important; */
+  margin-bottom: 12px !important;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15.6px;
+  letter-spacing: 0.15px;
+  color: #272727 !important;
+}
+.formControl:last-child {
+  margin-bottom: 0 !important;
+}
+
+.formControl input,
+.formControl textarea {
+  text-transform: initial;
+}
+.formControl input::placeholder,
+.formControl textarea::placeholder {
+  font-size: 12px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.row .formGroup {
+  flex: 1;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.row .formGroup {
+  flex: 1;
+}
+
+.tag {
+  background: #f7f6fb;
+  color: #362396;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 0px 10px;
+  text-transform: capitalize !important;
+  /* padding: 0px 14px; */
+  border-radius: 16px;
+  /* margin-left: 6px; */
+}
+
+.sendbtn {
+  color: #705ccf;
+  background-color: #f7f6fb;
+  padding: 2px 8px;
+  font-size: 0.5rem !important;
+  text-align: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.item {
+  border-radius: 6px;
+  background-color: #fcfbfc;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.list:last-child {
+  margin-bottom: 45px;
+}
+
+.reference {
+  display: flex;
+}
+
+.submitRequest {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 3rem;
+}
+
+.form {
+  margin-top: 10px;
+}
+.addReferanceIcon {
+  width: 25px;
+  height: 25px;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #705ccf !important;
+  color: #fff !important;
+  padding: 0 !important;
+}
+.addReferanceIcon svg {
+  font-size: 15px !important;
+}

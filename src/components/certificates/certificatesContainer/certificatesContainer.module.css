@@ -1,0 +1,50 @@
+/* .container {
+  min-height: 200px;
+} */
+.container:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.container h6 {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 24px;
+  text-transform: capitalize;
+}
+
+.emptyMessage p {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: left;
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.notStarted {
+  background-color: #ebebeb;
+  color: #5c5c5c;
+}
+
+.noData {
+  background-color: #efeef8;
+  color: #272727;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.notStarted .icon {
+  color: #787878;
+}
+.noData .icon {
+  color: #4e3da3;
+}

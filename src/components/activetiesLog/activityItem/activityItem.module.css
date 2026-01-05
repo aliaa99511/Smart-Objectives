@@ -1,0 +1,54 @@
+.wrapper {
+  padding: 15px 0;
+}
+.wrapper:not(:last-child) {
+  border-bottom: 1px solid #edeef0;
+}
+.container,
+.content {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.container {
+  gap: 10px;
+}
+.content {
+  font-size: 12px;
+  line-height: 16px;
+  color: #686868;
+}
+.commentBox {
+  background-color: #efeff5;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 15px;
+  color: #505051;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 24px;
+  position: relative;
+}
+.commentBox::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 7px;
+  border: 8px solid transparent;
+  border-bottom: 8px solid #d9d9d9;
+  width: 18px;
+}
+
+.commentBox::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 7px;
+  border: 8px solid transparent;
+  border-bottom: 8px solid #efeff5;
+
+  width: 18px;
+
+  border-radius: 4px;
+}

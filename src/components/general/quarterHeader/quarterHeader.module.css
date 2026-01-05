@@ -1,0 +1,67 @@
+.hederContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* margin-bottom: 8px; */
+  text-transform: capitalize;
+  /* margin-top: 10px; */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.newObj {
+  all: unset;
+  padding: 8px 16px;
+  gap: 4px;
+  font-size: 12px;
+  border-radius: 8px;
+  background-color: #705ccf;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+}
+
+.year {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #362396;
+  margin: 0;
+}
+
+.monthsContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f7f5ff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #f4f1fd;
+}
+
+.monthItem {
+  color: #4b3ca8;
+  font-size: 12px;
+  /* font-size: 10px; */
+  /* font-size: 0.7rem; */
+}
+
+.separator {
+  color: #ffffff;
+  font-weight: normal;
+  font-weight: bold;
+  padding-left: 16px;
+}
+
+.light {
+  .monthsContainer {
+    border: 1px solid #E8E9EB;
+    background-color: transparent;
+  }
+}

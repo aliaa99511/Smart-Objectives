@@ -1,0 +1,139 @@
+.objectiveEditeDrawer {
+  position: relative !important;
+}
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* position:relative ; */
+}
+
+.detailsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.title {
+  margin-top: 10px;
+}
+
+.objectiveStatuse {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 1rem;
+  border-radius: 20px;
+  color: #686868;
+  border-radius: 20px;
+  background-color: #fcfbfc !important;
+}
+
+.referenceslink {
+  color: #3789e8 !important;
+  font-size: 14px !important;
+  text-decoration: underline !important;
+  line-height: 20px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.headerItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.userName {
+  font-size: 0.78rem !important;
+}
+
+.statusSection {
+  position: relative;
+}
+
+.statusSection::after {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 8%;
+  width: 1.5px;
+  height: 100%;
+  background-color: #f4f3f5;
+}
+
+.statusSection::before {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 8%;
+  width: 1.5px;
+  height: 100%;
+  background-color: #f4f3f5;
+}
+
+.statusBox {
+  font-size: 14px !important;
+  background: #f5f5f5;
+  border-radius: 6px;
+  width: 80%;
+  padding: 0.3rem;
+  font-size: 0.78rem !important;
+}
+
+.assignedOn {
+  font-weight: bold;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.detailsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  /* justify-content: space-between;
+    min-height: 62vh; */
+}
+
+.lable {
+  font-size: 14px !important;
+  text-transform: capitalize;
+  color: #686868;
+  margin-bottom: 5px !important;
+}
+
+.detals {
+  font-size: 0.9rem !important;
+  /* text-transform: lowercase; */
+  font-weight: 500 !important;
+}
+
+.detailsItem {
+  margin-bottom: 20px;
+}
+
+.submitButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: 30px;
+  gap: 10px;
+}
+.cancelButton {
+  color: #686868 !important;
+  text-transform: capitalize !important;
+}
+.outlineButton {
+  color: #ef3535 !important;
+  border-color: #eccccc !important;
+}

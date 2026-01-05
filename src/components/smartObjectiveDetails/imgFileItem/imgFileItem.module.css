@@ -1,0 +1,44 @@
+.fileItem {
+  padding: 10px 23px 10px 16px;
+  gap: 12px;
+  border-radius: 4px;
+  background-color: #fcfcfc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fileItem:not(:last-child) {
+  margin-bottom: 10px;
+}
+.fileItemContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fileIcon {
+  color: var(--primary-color);
+  font-size: 20px;
+}
+.deleteIcon img {
+  width: 100%;
+}
+.fileName {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--dark-color-5);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.fileSize {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--dark-color-1);
+}
+.deleteIcon {
+  width: 32px;
+  height: 32px;
+}

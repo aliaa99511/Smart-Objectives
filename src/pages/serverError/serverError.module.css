@@ -1,0 +1,32 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.button {
+  position: absolute;
+  top: calc(100vh - 100px);
+  background-color: #f6f4fc;
+  color: #705ccf;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+  border: 1px solid #e8e5f7;
+}
+
+.button:hover {
+  background-color: #e8e8ff;
+}

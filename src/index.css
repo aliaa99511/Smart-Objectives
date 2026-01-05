@@ -1,0 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+:root {
+  --primary-color: #705ccf;
+  --primary-color-d: #362396;
+  --primary-color-l: #f7f6fb;
+  --dark-color-main: #272727;
+  --gray-color-main: #686868;
+  --gray-color-l: #e8e9eb;
+}
+*,
+*::after,
+*::before {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  text-transform: capitalize;
+}
+
+a {
+  text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-break: anywhere;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  display: block !important;
+}
+
+/*****************************
+override - MUI Accordion style
+******************************/
+.MuiButtonBase-root.MuiAccordionSummary-root {
+  padding-left: 0 !important;
+  min-height: unset !important;
+}
+.MuiAccordionSummary-content {
+  margin: 0 !important;
+}
+.MuiAccordionDetails-root {
+  padding: 0 !important;
+}
+.MuiAccordion-root.activeParent button {
+  background-color: #fff !important;
+  box-shadow: 0px 4px 4px 0px #00000009 !important;
+}
+.MuiAccordion-root::before {
+  display: none !important;
+}
+
+/*****************************
+override - MUI form inputs style
+******************************/
+.MuiFormHelperText-root {
+  margin-inline: 0 !important;
+}
+input.MuiInputBase-input {
+  padding: 12.5px 14px !important;
+}
+/*****************************
+override - MUI form Autocomplete style
+******************************/
+
+input.MuiAutocomplete-input {
+  padding: 3px 4px 2px 5px !important;
+}
+/*****************************
+override - MUI MuiToggleButton style
+******************************/
+.MuiToggleButtonGroup-root {
+  gap: 2px !important;
+}
+.MuiToggleButton-root {
+  /* padding: 8px !important; */
+  background-color: #f5f5f7 !important ;
+  border: 0 !important;
+  border-radius: 8px !important;
+}
+.MuiToggleButton-root.Mui-selected {
+  border: 1px solid #e8e8e8 !important;
+  background-color: #fff !important;
+}
+/*****************************
+override - table
+******************************/
+/*table header*/
+.MuiDataGrid-columnHeaders > div {
+  background: #f6f5f7 !important;
+  color: #72757c !important;
+  text-transform: capitalize;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 24px !important;
+  border-radius: 4px !important;
+}
+/*table header border bottom*/
+.MuiDataGrid-topContainer::after {
+  background-color: transparent !important;
+}
+/*table header border separator*/
+.MuiDataGrid-columnSeparator {
+  color: transparent !important;
+}
+/*table body*/
+.MuiDataGrid-root {
+  border-color: transparent !important;
+  text-transform: capitalize;
+}
+/*last row*/
+.MuiDataGrid-root .MuiDataGrid-withBorderColor {
+  border-color: transparent !important;
+}
+/*table row hover*/
+.MuiDataGrid-row:hover {
+  background-color: #f7fafd !important;
+}
+/*reomove border from cell*/
+.MuiDataGrid-cell {
+  border-top: 1px solid transparent !important;
+}
+/*pagination*/
+.MuiTablePagination-root {
+  width: 100% !important;
+}
+/*pagination toolbar*/
+.MuiTablePagination-toolbar {
+  padding: 0 !important;
+  justify-content: space-between !important;
+}
+.MuiTablePagination-spacer {
+  display: none !important;
+}
+
+.MuiDataGrid-cell {
+  display: flex !important;
+  align-items: center !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.MuiDataGrid-cell[data-field="title"] {
+  display: block !important;
+}
+.MuiDataGrid-cell[data-field="title"].MuiDataGrid-cellSkeleton {
+  display: flex !important;
+}
+
+/*****************************
+override - options list
+******************************/
+.MuiMenu-list {
+  min-width: 170px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 8px !important;
+}
+.MuiMenuItem-root {
+  min-width: 100% !important;
+  justify-content: center !important;
+}
+.MuiMenuItem-root:not(:last-child) {
+  border-bottom: 1px solid #f5f5f7 !important;
+}
+/*****************************
+override - Modal
+******************************/
+.MuiDialog-container {
+  border-radius: 8px !important;
+}
+/*****************************
+override - Grid
+******************************/
+.MuiGrid2-root {
+  gap: 10px !important;
+}
+/*****************************
+override - progress Slider
+******************************/
+.MuiSlider-root {
+  height: 8px !important;
+}
+.MuiSlider-valueLabel {
+  background-color: #f4f1fd !important;
+  color: var(--primary-color) !important;
+  padding: 2px 8px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+  font-weight: 700 !important;
+  font-size: 8px !important;
+}
+/*****************************
+Custom classes
+******************************/
+.error-input {
+  display: flex;
+  justify-content: start;
+  font-size: 12px;
+  /* margin-top: 5px; */
+  font-weight: 400;
+  color: #d32f2f;
+  margin-right: 14px;
+}
+.input-skeleton {
+  margin-bottom: 5px;
+}

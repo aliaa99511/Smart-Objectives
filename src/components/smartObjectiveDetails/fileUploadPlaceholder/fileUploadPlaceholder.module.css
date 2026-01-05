@@ -1,0 +1,69 @@
+.container {
+  width: 100%;
+  height: 180px;
+  border: 2px dashed rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+.error {
+  border: 2px dashed #d32f2f;
+}
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 20px);
+}
+.mainPlaceHolder {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17.07px;
+  letter-spacing: 0.01em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+  gap: 5px;
+}
+.mainPlaceHolder span:first-child {
+  color: #3789e8;
+  text-decoration: underline;
+}
+.mainPlaceHolder span:last-child {
+  color: #272727;
+}
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #3789e8;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.spretor {
+  margin-inline: 15px;
+}
+.secondaryPlacehoder {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 14.63px;
+  letter-spacing: 0.01em;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 8px;
+}
+.fileNameContainer {
+  background-color: #fdfcff;
+  color: #514a73;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 10px 10px 0 10px;
+  width: 100%;
+}

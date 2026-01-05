@@ -1,0 +1,6 @@
+.loader {
+  color: #333 !important;
+}
+.main {
+  color: var(--primary-color) !important;
+}

@@ -1,0 +1,102 @@
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(50vh - 130px);
+
+  margin-top: 5px;
+}
+
+.scrollContainer {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* gap: 0.5rem; */
+  /* min-height: 12vh; */
+  min-height: calc(100% - 58px);
+  /* justify-content: space-between; */
+}
+
+.objetiveitem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 0.5rem;
+  border: 1px solid #f4f1fd;
+  border-radius: 8px;
+  align-items: center;
+  font-weight: 500;
+  font-size: 0.75rem;
+  height: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.objetiveitem:hover {
+  background-color: #f4f1fd;
+}
+
+.objetiveTitle {
+  max-width: 50%;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 130%;
+  letter-spacing: 0.15px;
+  color: #272727;
+}
+.objetiveTitle p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Container for progress bar and legend */
+.progressContainer {
+  margin-top: 5px;
+  /* margin-top: 16px; */
+}
+
+/* Progress bar container */
+.progressBar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Each segment of the progress bar */
+.progressSegment {
+  /* flex: 1; */
+  height: 16px;
+  border-radius: 6px;
+  height: 24px;
+}
+
+/* Legend styles */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+.wait {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.cont p {
+  margin-bottom: 0;
+
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #adabb5;
+}

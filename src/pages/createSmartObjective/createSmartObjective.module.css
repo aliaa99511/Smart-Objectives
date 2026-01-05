@@ -1,0 +1,27 @@
+.breadCrumbsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.breadCrumbs {
+  color: #686868 !important;
+  font-weight: 500;
+  font-size: 12px;
+  /* line-height: 24px; */
+  border-radius: 24px;
+  padding: 8px 16px;
+  background-color: #f6f6f7;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pageTitle {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  color: #272727;
+}

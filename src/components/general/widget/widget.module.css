@@ -1,0 +1,9 @@
+.widget {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1.5px solid var(--gray-color-l);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
