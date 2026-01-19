@@ -27,7 +27,16 @@ const DepartmentTeamMemberCard = ({ member, department }) => {
     });
     handleClose();
   };
-
+  const handleCreateAchievement = () => {
+    // Pass employee ID via state instead of URL parameter
+    navigate(
+      `/myDepartment/createAchievementByDepartmentManager?departmentId=${department.id}}`,
+      {
+        state: { employeeId: member.id },
+      }
+    );
+    handleClose();
+  };
   const handleQuarterLog = () => {
     // Pass employee ID via state instead of URL parameter
     navigate(`/myDepartment/quarterLog?departmentId=${department.id}}`, {
@@ -39,6 +48,16 @@ const DepartmentTeamMemberCard = ({ member, department }) => {
     // Pass employee ID via state instead of URL parameter
     navigate(
       `/myDepartment/certificateWithDepartmentManager?departmentId=${department.id}}`,
+      {
+        state: { employeeId: member.id },
+      }
+    );
+    handleClose();
+  };
+  const handleAchievements = () => {
+    // Pass employee ID via state instead of URL parameter
+    navigate(
+      `/myDepartment/achievementsWithDepartmentManager?departmentId=${department.id}}`,
       {
         state: { employeeId: member.id },
       }
@@ -99,6 +118,12 @@ const DepartmentTeamMemberCard = ({ member, department }) => {
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleCertificate}>
           certificate
+        </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={handleCreateAchievement}>
+          Create Achievement
+        </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={handleAchievements}>
+          achievements
         </MenuItem>
       </Menu>
     </div>

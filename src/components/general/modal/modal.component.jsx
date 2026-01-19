@@ -16,6 +16,9 @@ import MainLoader from "../mainLoader/mainLoader.component";
 const SuccsessModalSO = lazy(() =>
   import("../succsessModalSO/succsessModalSO.component")
 );
+const SuccsessAchievementSO = lazy(() =>
+  import("../succsessAchievementSO/succsessAchievementSO.component")
+);
 const IgnoreSoModal = lazy(() =>
   import("../../currentObjectives/ignoreSoModal/ignoreSoModal.component")
 );
@@ -48,6 +51,8 @@ const Modal = () => {
     switch (modalType) {
       case "createSmartObjectiveSuccess":
         return <SuccsessModalSO modalData={modalData} />;
+      case "createAchievementSuccess":
+        return <SuccsessAchievementSO />;
       case "ignoreSo":
         return <IgnoreSoModal modalData={modalData} />;
       case "rejectSo":

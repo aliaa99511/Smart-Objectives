@@ -4,6 +4,7 @@ import UserInfo from "../../general/userInfo/userInfo.component";
 import styles from "./sideBar.module.css";
 import { getAccessibleRoutesSchema } from "../../../helpers/utilities/permissinUtilities/getAccessibleRoutesSchema";
 import { TbTargetArrow, TbCategoryPlus } from "react-icons/tb";
+import { GiTrophyCup } from "react-icons/gi";
 import { PiTreeView } from "react-icons/pi";
 import { LiaCertificateSolid } from "react-icons/lia";
 import {
@@ -73,6 +74,7 @@ const SideBar = () => {
     MdOutlinePeople,
     ImTree,
     PiTreeView,
+    GiTrophyCup
   };
 
   const handleChange = (panel) => (event, newExpanded) => {
@@ -114,9 +116,8 @@ const SideBar = () => {
                   onChange={handleChange(route.text)}
                   disableGutters
                   elevation={0}
-                  className={`${styles.accordion} ${
-                    isActive ? "activeParent" : ""
-                  }`}
+                  className={`${styles.accordion} ${isActive ? "activeParent" : ""
+                    }`}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -125,9 +126,8 @@ const SideBar = () => {
                     className={styles.accordionSummary}
                   >
                     <div
-                      className={`${styles.parentAccordion} ${
-                        isActive ? styles.activeParentText : ""
-                      }`}
+                      className={`${styles.parentAccordion} ${isActive ? styles.activeParentText : ""
+                        }`}
                     >
                       {ParentIconComponent && (
                         <ParentIconComponent
@@ -185,10 +185,9 @@ const SideBar = () => {
                 className={({ isActive }) =>
                   [
                     isActive ? styles.active : "",
-                    `${styles.link} ${
-                      isNotfication &&
-                      route.to == "/myTeam" &&
-                      styles.pendingRequest
+                    `${styles.link} ${isNotfication &&
+                    route.to == "/myTeam" &&
+                    styles.pendingRequest
                     } `,
                   ]
                     .filter(Boolean)

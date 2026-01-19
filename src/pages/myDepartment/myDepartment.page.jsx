@@ -159,6 +159,24 @@ const MyDepartment = () => {
     );
     handleMenuClose();
   };
+  const handleCreateAchievement = () => {
+    navigate(
+      `/myDepartment/createAchievementByDepartmentManager?departmentId=${userData?.departmentId}&year=${selectedYear}`,
+      {
+        state: { employeeId: selectedRow.id },
+      }
+    );
+    handleMenuClose();
+  };
+  const handleAchievements = () => {
+    navigate(
+      `/myDepartment/achievementsWithDepartmentManager?departmentId=${userData?.departmentId}&year=${selectedYear}`,
+      {
+        state: { employeeId: selectedRow.id },
+      }
+    );
+    handleMenuClose();
+  };
 
   const columns = [
     {
@@ -199,10 +217,9 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${
-              SO_ATCHIVEMENT_STATUS["UnderReview"]?.txtColor ||
+            color: `${SO_ATCHIVEMENT_STATUS["UnderReview"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-            }`,
+              }`,
           }}
         >
           {params.value}
@@ -219,10 +236,9 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${
-              SO_ATCHIVEMENT_STATUS["Achieved"]?.txtColor ||
+            color: `${SO_ATCHIVEMENT_STATUS["Achieved"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-            }`,
+              }`,
           }}
         >
           {params.value}
@@ -239,10 +255,9 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${
-              SO_ATCHIVEMENT_STATUS["NotAchieved"]?.txtColor ||
+            color: `${SO_ATCHIVEMENT_STATUS["NotAchieved"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-            }`,
+              }`,
           }}
         >
           {params.value}
@@ -378,18 +393,15 @@ const MyDepartment = () => {
             error={
               isEmployeesError
                 ? {
-                    message:
-                      "Error loading department members. Please try again.",
-                  }
+                  message:
+                    "Error loading department members. Please try again.",
+                }
                 : null
             }
           />
 
           <TableOptionsList anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
-            <MenuItem
-              className={styles.menuItem}
-              onClick={handleCurrentObjectives}
-            >
+            <MenuItem className={styles.menuItem} onClick={handleCurrentObjectives}>
               Current Objectives
             </MenuItem>
             <MenuItem className={styles.menuItem} onClick={handleQuarterLog}>
@@ -397,6 +409,12 @@ const MyDepartment = () => {
             </MenuItem>
             <MenuItem className={styles.menuItem} onClick={handleCertificate}>
               Certificate
+            </MenuItem>
+            <MenuItem className={styles.menuItem} onClick={handleCreateAchievement}>
+              Create Achievement
+            </MenuItem>
+            <MenuItem className={styles.menuItem} onClick={handleAchievements}>
+              achievements
             </MenuItem>
           </TableOptionsList>
         </Box>

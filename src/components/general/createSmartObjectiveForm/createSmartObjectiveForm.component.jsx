@@ -406,7 +406,7 @@ const CreateSmartObjectiveForm = ({
                       placeholder="Choose One"
                       error={!!errors.CategoryId}
                       className={styles.formControl}
-                      // helperText={errors?.assignTo?.message}
+                    // helperText={errors?.assignTo?.message}
                     />
                   )}
                 />

@@ -7,6 +7,7 @@
   justify-content: center;
   align-items: center;
   background-color: #fff;
+  cursor: pointer;
 }
 .error {
   border: 2px dashed #d32f2f;

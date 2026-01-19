@@ -26,7 +26,16 @@ const TeamMemberCard = ({ member }) => {
     });
     handleClose();
   };
-
+  const handleCreateAchievement = () => {
+    // Pass the entire member object via state
+    navigate("/myTeam/createAchievementByManager", {
+      state: {
+        employeeId: member.id,
+        memberData: member // Add this line to pass the entire member object
+      },
+    });
+    handleClose();
+  };
   const handleCurrentObjectives = () => {
     // Pass employee ID via state instead of URL parameter
     navigate("/myTeam/currentObjectives", {
@@ -44,6 +53,13 @@ const TeamMemberCard = ({ member }) => {
   const handleCertificate = () => {
     // Pass employee ID via state instead of URL parameter
     navigate("/myTeam/certificateWithManager", {
+      state: { employeeId: member.id },
+    });
+    handleClose();
+  };
+  const handleAchievements = () => {
+    // Pass employee ID via state instead of URL parameter
+    navigate("/myTeam/achievementsWithManager", {
       state: { employeeId: member.id },
     });
     handleClose();
@@ -97,6 +113,9 @@ const TeamMemberCard = ({ member }) => {
         <MenuItem className={styles.menuItem} onClick={handleNewObjective}>
           New Objective
         </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={handleCreateAchievement}>
+          Create Achievement
+        </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleCurrentObjectives}>
           Current Objectives
         </MenuItem>
@@ -105,6 +124,9 @@ const TeamMemberCard = ({ member }) => {
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleCertificate}>
           certificate
+        </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={handleAchievements}>
+          achievements
         </MenuItem>
       </Menu>
     </div>

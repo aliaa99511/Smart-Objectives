@@ -28,6 +28,12 @@ import CertificateWithHr from "../pages/certificateWithHr/certificateWithHr.comp
 import MyDepartment from "../pages/myDepartment/myDepartment.page";
 import QuarterLogWithDepartmentManager from "../pages/quarterLogWithDepartmentManager/quarterLogWithDepartmentManager.page";
 import CertificateWithDepartmentManager from "../pages/certificateWithDepartmentManager/certificateWithDepartmentManager.component";
+import CreateAchievementByManager from "../pages/createAchievementsByManager/createAchievementsByManager";
+import AchievementsWithManager from "../pages/achievementsWithManager/achievementsWithManager";
+import Achievements from "../pages/achievements/achievements";
+import AchievementsWithDepartmentManager from "../pages/achievementsWithDepartmentManager/achievementsWithDepartmentManager";
+import CreateAchievementByDepartmentManager from "../pages/createAchievementByDepartmentManager/createAchievementByDepartmentManager";
+import AchievementsWithHr from "../pages/achievementsWithHr/achievementsWithHr";
 
 const AppRoutes = () => {
   const { isLoading, error } = useFetchCurrentUserQuery();
@@ -57,6 +63,30 @@ const AppRoutes = () => {
           element: (
             <WithPermission page="myObjectives">
               <MyObjectives />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "quartersLog",
+          element: (
+            <WithPermission page="quartersLog">
+              <QuartersLog />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "certificates",
+          element: (
+            <WithPermission page="certificates">
+              <Certificates />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "achievements",
+          element: (
+            <WithPermission page="achievements">
+              <Achievements />
             </WithPermission>
           ),
         },
@@ -102,6 +132,14 @@ const AppRoutes = () => {
           ),
         },
         {
+          path: "myTeam/createAchievementByManager",
+          element: (
+            <WithPermission page="createAchievementByManager">
+              <CreateAchievementByManager />
+            </WithPermission>
+          ),
+        },
+        {
           path: "myTeam/currentObjectives",
           element: (
             <WithPermission page="currentObjectives">
@@ -114,6 +152,14 @@ const AppRoutes = () => {
           element: (
             <WithPermission page="certificateWithManager">
               <CertificateWithManager />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "myTeam/achievementsWithManager",
+          element: (
+            <WithPermission page="achievementsWithManager">
+              <AchievementsWithManager />
             </WithPermission>
           ),
         },
@@ -134,6 +180,14 @@ const AppRoutes = () => {
           ),
         },
         {
+          path: "myDepartment/createAchievementByDepartmentManager",
+          element: (
+            <WithPermission page="createAchievementByDepartmentManager">
+              <CreateAchievementByDepartmentManager />
+            </WithPermission>
+          ),
+        },
+        {
           path: "myDepartment/quarterLog",
           element: (
             <WithPermission page="quarterLogWithDepartmentManager">
@@ -146,6 +200,14 @@ const AppRoutes = () => {
           element: (
             <WithPermission page="certificateWithDepartmentManager">
               <CertificateWithDepartmentManager />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "myDepartment/achievementsWithDepartmentManager",
+          element: (
+            <WithPermission page="achievementsWithDepartmentManager">
+              <AchievementsWithDepartmentManager />
             </WithPermission>
           ),
         },
@@ -174,18 +236,10 @@ const AppRoutes = () => {
           ),
         },
         {
-          path: "quartersLog",
+          path: "myCompany/achievementsWithHr",
           element: (
-            <WithPermission page="quartersLog">
-              <QuartersLog />
-            </WithPermission>
-          ),
-        },
-        {
-          path: "certificates",
-          element: (
-            <WithPermission page="certificates">
-              <Certificates />
+            <WithPermission page="achievementsWithHr">
+              <AchievementsWithHr />
             </WithPermission>
           ),
         },

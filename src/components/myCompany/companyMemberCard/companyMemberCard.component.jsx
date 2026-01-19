@@ -21,8 +21,7 @@ const CompanyMemberCard = ({ member, department }) => {
 
   const handleCurrentObjectives = () => {
     navigate(
-      `/myCompany/currentObjectives?departmentId=${
-        department.id
+      `/myCompany/currentObjectives?departmentId=${department.id
       }&departmentTitle=${encodeURIComponent(department.title)}`,
       {
         state: {
@@ -36,8 +35,7 @@ const CompanyMemberCard = ({ member, department }) => {
   const handleQuarterLog = () => {
     // Pass employee ID via state instead of URL parameter
     navigate(
-      `/myCompany/quarterLog?departmentId=${
-        department.id
+      `/myCompany/quarterLog?departmentId=${department.id
       }&departmentTitle=${encodeURIComponent(department.title)}`,
       {
         state: { employeeId: member.id },
@@ -48,8 +46,18 @@ const CompanyMemberCard = ({ member, department }) => {
   const handleCertificate = () => {
     // Pass employee ID via state instead of URL parameter
     navigate(
-      `/myCompany/certificateWithHr?departmentId=${
-        department.id
+      `/myCompany/certificateWithHr?departmentId=${department.id
+      }&departmentTitle=${encodeURIComponent(department.title)}`,
+      {
+        state: { employeeId: member.id },
+      }
+    );
+    handleClose();
+  };
+  const handleAchievements = () => {
+    // Pass employee ID via state instead of URL parameter
+    navigate(
+      `/myCompany/achievementsWithHr?departmentId=${department.id
       }&departmentTitle=${encodeURIComponent(department.title)}`,
       {
         state: { employeeId: member.id },
@@ -111,6 +119,9 @@ const CompanyMemberCard = ({ member, department }) => {
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleCertificate}>
           certificate
+        </MenuItem>
+        <MenuItem className={styles.menuItem} onClick={handleAchievements}>
+          achievements
         </MenuItem>
       </Menu>
     </div>

@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.iconContainer {
+  margin-bottom: 16px;
+  background: #d9e8d2;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+.icon {
+  font-size: 25px;
+  color: #4caf50;
+}
+
+.title {
+  color: #4caf50;
+  font-size: 24px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  text-transform: capitalize;
+}
+
+.message {
+  color: #666;
+  margin-bottom: 24px;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+  text-transform: lowercase;
+}
+.buttonContainer {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.doneButton {
+  min-width: 120px;
+  text-transform: none;
+
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.doneButton {
+  color:  #686868;
+  border-color:  #686868;
+}
+
+.doneButton:hover {
+  background-color: rgba(76, 175, 80, 0.04);
+}

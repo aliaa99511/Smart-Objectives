@@ -64,8 +64,8 @@ export function WithPermission({ children, page }) {
       page == "unauthorized"
         ? navigate("/", { replace: true })
         : !canAccessPage(userData, page)
-        ? navigate("/unauthorized", { replace: true })
-        : null;
+          ? navigate("/unauthorized", { replace: true })
+          : null;
     }
   }, [userData, error, navigate, page, isLoading]);
 
@@ -80,7 +80,6 @@ export function WithPermission({ children, page }) {
       ? children
       : null;
   }
-
   return userData &&
     !error &&
     isUserAuthrized(userData) &&

@@ -7,6 +7,7 @@ import { getYearAndQuarter } from "../../helpers/utilities/getYearAndQuarter";
 import TeamMemberCard from "../../components/myTeam/teamMemberCard/teamMemberCard.component";
 import MainLoader from "../../components/general/mainLoader/mainLoader.component";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
+
 const MyTeam = () => {
   const { year, quarter } = getYearAndQuarter();
   const {

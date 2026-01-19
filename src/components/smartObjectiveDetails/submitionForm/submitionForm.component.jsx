@@ -179,19 +179,17 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
                     value="Achieved"
                     control={<Radio color="success" />}
                     label="Achieved"
-                    className={`${styles.radioLabel} ${
-                      field.value === "Achieved" ? styles.achievedRadio : ""
-                    }`}
+                    className={`${styles.radioLabel} ${field.value === "Achieved" ? styles.achievedRadio : ""
+                      }`}
                   />
                   <FormControlLabel
                     value="NotAchieved"
                     control={<Radio color="error" />}
                     label="Not Achieved"
-                    className={`${styles.radioLabel} ${
-                      field.value === "NotAchieved"
+                    className={`${styles.radioLabel} ${field.value === "NotAchieved"
                         ? styles.notAchievedRadio
                         : ""
-                    }`}
+                      }`}
                   />
                 </RadioGroup>
                 {errors.achievementStatus && (

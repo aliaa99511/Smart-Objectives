@@ -10,9 +10,8 @@ export const smartObjectiveApiSlice = createApi({
   endpoints: (builder) => ({
     createSmartObjective: builder.mutation({
       query: (objectiveData) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.create
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.create
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: objectiveData,
@@ -39,9 +38,8 @@ export const smartObjectiveApiSlice = createApi({
     // New query to fetch smart objectives
     getMySmartObjectives: builder.query({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.myObjective
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.myObjective
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: { ...payload },
@@ -76,9 +74,9 @@ export const smartObjectiveApiSlice = createApi({
           completionRate: response?.d?.Result?.SmartObjectivesOverView?.Result
             ?.CompletionRate
             ? Math.floor(
-                response?.d?.Result?.SmartObjectivesOverView?.Result
-                  ?.CompletionRate
-              )
+              response?.d?.Result?.SmartObjectivesOverView?.Result
+                ?.CompletionRate
+            )
             : 0,
         };
         return {
@@ -92,9 +90,8 @@ export const smartObjectiveApiSlice = createApi({
     // New query to fetch smart objective details
     getSmartObjectiveDetails: builder.query({
       query: (objectiveId) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.objectiveDetails
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.objectiveDetails
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: { ObjectiveID: objectiveId },
@@ -140,9 +137,8 @@ export const smartObjectiveApiSlice = createApi({
     // Add update smart objective mutation
     updateSmartObjective: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.update
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.update
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -174,9 +170,8 @@ export const smartObjectiveApiSlice = createApi({
     // Add update progress mutation
     updateSmartObjectiveProgress: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.updateProgress
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.updateProgress
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -202,9 +197,8 @@ export const smartObjectiveApiSlice = createApi({
     // Add this mutation to your existing smartObjectiveApiSlice.js file
     submitAchievement: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.submitAchievement
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.submitAchievement
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -232,9 +226,8 @@ export const smartObjectiveApiSlice = createApi({
     // Add quarters log query
     getQuartersLog: builder.query({
       query: ({ year, employeeId = null }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.smartObjectives.quartersLog
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.quartersLog
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -277,9 +270,8 @@ export const smartObjectiveApiSlice = createApi({
 
     getCertificates: builder.query({
       query: ({ year, employeeId = null }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${
-          ENDPOINTS.employee.getCertificates
-        }`,
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.employee.getCertificates
+          }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -312,6 +304,29 @@ export const smartObjectiveApiSlice = createApi({
       },
       providesTags: ["Certificates"],
     }),
+    getAchievementsLogByEmployeeID: builder.query({
+      query: ({ employeeId = null }) => {
+        let params = {
+          $select: "*,Employee/Id,Employee/Title,Department/Id,Department/Title",
+          $expand: "Employee,AttachmentFiles,Department",
+          $orderby: "Created desc",
+        };
+
+        if (employeeId) {
+          params.$filter = `EmployeeId eq ${employeeId}`;
+        }
+
+        return {
+          url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.getAchievement}`,
+          method: "GET",
+          headers: API_HEADERS.DEFAULT,
+          params: params,
+        };
+      },
+      transformResponse: (response) => response.d?.results || [],
+      providesTags: ["Achievements"],
+    }),
+
   }),
 });
 
@@ -325,4 +340,5 @@ export const {
   useSubmitAchievementMutation,
   useGetQuartersLogQuery,
   useGetCertificatesQuery,
+  useGetAchievementsLogByEmployeeIDQuery,
 } = smartObjectiveApiSlice;

@@ -11,6 +11,7 @@ export const ENDPOINTS = {
     get_current_user_info_for_img:
       "lists/GetByTitle('Employees')/items?$filter=Employee eq ",
   },
+
   smartObjectives: {
     create: `_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/Create`,
     myObjective: `_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetObjectives`,
@@ -23,11 +24,15 @@ export const ENDPOINTS = {
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/Update",
     quartersLog:
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetQuartersLog",
+    createAchievement:
+      "_api/web/lists/getbytitle('Achievement')/items",
+    getAchievement:
+      "_api/web/lists/getbytitle('Achievement')/items",
   },
   employee: {
     getAllEmployees: `lists/GetByTitle('Employees')/items?$select=EmployeeId,Employee/Title&$expand=Employee`,
-    getCertificates:
-      "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetCertificates",
+    getCertificates: "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetCertificates",
+    // getAchievements: `lists/GetByTitle('Achievement')/items?$select=EmployeeId,Employee/Title&$expand=Employee`,
   },
   manager: {
     getSmartObjectives:

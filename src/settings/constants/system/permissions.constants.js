@@ -20,6 +20,12 @@ const pagesForAllUsers = {
     icon: "LiaCertificateSolid",
     hasPermission: true,
   },
+  achievements: {
+    text: "achievements",
+    to: "/achievements",
+    icon: "GiTrophyCup",
+    hasPermission: true,
+  },
 };
 
 export const ROLES = {
@@ -70,10 +76,16 @@ export const ROLES = {
       createSmartObjectiveByManager: {
         hasPermission: true,
       },
+      createAchievementByManager: {
+        hasPermission: true,
+      },
       currentObjectives: {
         hasPermission: true,
       },
       certificateWithManager: {
+        hasPermission: true,
+      },
+      achievementsWithManager: {
         hasPermission: true,
       },
       quarterLogWithManager: {
@@ -111,6 +123,9 @@ export const ROLES = {
       quarterLogWithHr: {
         hasPermission: true,
       },
+      achievementsWithHr: {
+        hasPermission: true,
+      },
     },
   },
   DepartmentManager: {
@@ -125,10 +140,16 @@ export const ROLES = {
       currentObjectives: {
         hasPermission: true,
       },
+      createAchievementByDepartmentManager: {
+        hasPermission: true,
+      },
       certificateWithDepartmentManager: {
         hasPermission: true,
       },
       quarterLogWithDepartmentManager: {
+        hasPermission: true,
+      },
+      achievementsWithDepartmentManager: {
         hasPermission: true,
       },
     },
