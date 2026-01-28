@@ -6,7 +6,7 @@ export const smartObjectiveApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "",
   }),
-  tagTypes: ["SmartObjectives", "QuartersLog", "Certificates"],
+  tagTypes: ["SmartObjectives", "QuartersLog", "Certificates", "OrganizationDashboard"],
   endpoints: (builder) => ({
     createSmartObjective: builder.mutation({
       query: (objectiveData) => ({
@@ -327,6 +327,148 @@ export const smartObjectiveApiSlice = createApi({
       providesTags: ["Achievements"],
     }),
 
+    getOrganizationDashboard: builder.query({
+      query: ({ year, quarter, topAchieverCount = 3 }) => ({
+        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.OrganizationDashBoard.Get}`,
+        method: "POST",
+        headers: API_HEADERS.DEFAULT,
+        body: { year, quarter, topAchieverCount },
+      }),
+
+      transformResponse: (response) => {
+        if (!response?.d?.IsSuccess) {
+          throw new Error(response?.d?.Message || "Dashboard load failed");
+        }
+
+        const result = response.d.Result;
+        /* ================= Departments ================= */
+        const departments = (result.AchievedObjectives || [])
+          .map((d) => ({
+            name: d.DepartmentName,
+            objectiveCount: d.ObjectiveCount,
+            achievedCount: d.AchievedObjectiveCount,
+            progress: d.ProgressPercentage,
+          }))
+
+        const maxObjectiveCount = Math.max(
+          ...departments.map((d) => d.objectiveCount),
+          0
+        );
+
+        /* ================= Top Achievers ================= */
+        const topAchievers = (result.TopAchiever || [])
+          .map((t) => ({
+            id: t.Employee.Id,
+            name: t.Employee.Name,
+            jobTitle: t.Employee.JobTitle,
+            image: t.Employee.Image,
+            achievementCount: t.AchievementCount,
+            totalWeight: t.TotalWeight,
+          }))
+          .sort((a, b) => b.achievementCount - a.achievementCount);
+
+        /* ================= Progress By Category ================= */
+        const categories = (result.TopCategories?.Categories || []).map(
+          (c) => ({
+            name: c.Category,
+            value: c.ProgressPercentage, // ✅ IMPORTANT
+          })
+        );
+
+        const maxCategoryProgress = result.TopCategories?.MaxProgressPercentage?.ProgressPercentage ?? 0;
+        /* ================= Overview ================= */
+        const overview = {
+          total: result.Overview.ObjectiveTotalCount,
+          achieved: result.Overview.Achieved,
+          notAchieved: result.Overview.NotAchieved,
+          notSubmitted: result.Overview.NotSubmitted,
+          underReview: result.Overview.UnderReview,
+          completionRate: result.Overview.CompletionRate,
+        };
+
+        return {
+          overview,
+          departments,
+          maxObjectiveCount,
+          topAchievers,
+          categories,
+          maxCategoryProgress,
+        };
+      },
+    }),
+    // getAchieversRanking: builder.query({
+    //   query: ({ year, departmentId = 0, achieversCount = 0 }) => {
+    //     const isAllDepartments = departmentId === 0;
+
+    //     return {
+    //       url: isAllDepartments
+    //         ? `${import.meta.env.VITE_BASE_URL}/_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllAchievers`
+    //         : `${import.meta.env.VITE_BASE_URL}/_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllAchieversByDepartment`,
+
+    //       method: "POST",
+    //       headers: API_HEADERS.DEFAULT,
+
+    //       body: isAllDepartments
+    //         ? {
+    //           year,
+    //           achieversCount,
+    //         }
+    //         : {
+    //           year,
+    //           departmentId,
+    //           achieversCount,
+    //         },
+    //     };
+    //   },
+
+    //   transformResponse: (response) => {
+    //     if (!response?.d?.IsSuccess) {
+    //       throw new Error(response?.d?.Message || "Failed to load rankings");
+    //     }
+    //     return response.d.Result;
+    //   },
+
+    //   providesTags: ["Rankings"],
+    // })
+
+
+    getAchieversRanking: builder.query({
+      query: ({ year, departmentId, achieversCount = 0 }) => {
+        const isAllDepartments = !departmentId || departmentId === 0;
+
+        const url = isAllDepartments
+          ? `${import.meta.env.VITE_BASE_URL}/_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllAchievers`
+          : `${import.meta.env.VITE_BASE_URL}/_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllAchieversByDepartment`;
+
+        const body = isAllDepartments
+          ? {
+            year,
+            achieversCount,
+          }
+          : {
+            year,
+            departmentId,
+            achieversCount,
+          };
+
+        return {
+          url,
+          method: "POST",
+          headers: API_HEADERS.DEFAULT,
+          body,
+        };
+      },
+
+      transformResponse: (response) => {
+        if (!response?.d?.IsSuccess) {
+          throw new Error(response?.d?.Message || "Failed to load rankings");
+        }
+        return response.d.Result;
+      },
+
+      providesTags: ["Rankings"],
+    })
+
   }),
 });
 
@@ -341,4 +483,6 @@ export const {
   useGetQuartersLogQuery,
   useGetCertificatesQuery,
   useGetAchievementsLogByEmployeeIDQuery,
+  useGetOrganizationDashboardQuery,
+  useGetAchieversRankingQuery,
 } = smartObjectiveApiSlice;

@@ -603,8 +603,8 @@ const CurrentObjectives = () => {
               error={
                 isObjectivesError
                   ? {
-                      message: "Error loading objectives. Please try again.",
-                    }
+                    message: "Error loading objectives. Please try again.",
+                  }
                   : null
               }
             />
@@ -621,44 +621,44 @@ const CurrentObjectives = () => {
                 "accept",
                 selectedRow
               ) && (
-                <>
-                  <MenuItem onClick={handleAccept} disabled={isAcceptLoading}>
-                    <div className={styles.itemText}>
-                      <span>Accept</span>
-                      {isAcceptLoading && <BtnLoader color={"main"} />}
-                    </div>
-                  </MenuItem>
-                  <MenuItem
-                    sx={{ color: "#EF3535 !important" }}
-                    onClick={handleIgnore}
-                    disabled={isIgnorLoading}
-                  >
-                    Ignore
-                  </MenuItem>
-                </>
-              )}
+                  <>
+                    <MenuItem onClick={handleAccept} disabled={isAcceptLoading}>
+                      <div className={styles.itemText}>
+                        <span>Accept</span>
+                        {isAcceptLoading && <BtnLoader color={"main"} />}
+                      </div>
+                    </MenuItem>
+                    <MenuItem
+                      sx={{ color: "#EF3535 !important" }}
+                      onClick={handleIgnore}
+                      disabled={isIgnorLoading}
+                    >
+                      Ignore
+                    </MenuItem>
+                  </>
+                )}
               {hasPermission(
                 userData,
                 "smartObjective",
                 "approve",
                 selectedRow
               ) && (
-                <>
-                  <MenuItem onClick={handleApprove} disabled={isApproveLoading}>
-                    <div className={styles.itemText}>
-                      <span>Approve</span>
-                      {isApproveLoading && <BtnLoader color={"main"} />}
-                    </div>
-                  </MenuItem>
-                  <MenuItem
-                    sx={{ color: "#EF3535 !important" }}
-                    onClick={handleReject}
-                    disabled={isRejecting}
-                  >
-                    Reject
-                  </MenuItem>
-                </>
-              )}
+                  <>
+                    <MenuItem onClick={handleApprove} disabled={isApproveLoading}>
+                      <div className={styles.itemText}>
+                        <span>Approve</span>
+                        {isApproveLoading && <BtnLoader color={"main"} />}
+                      </div>
+                    </MenuItem>
+                    <MenuItem
+                      sx={{ color: "#EF3535 !important" }}
+                      onClick={handleReject}
+                      disabled={isRejecting}
+                    >
+                      Reject
+                    </MenuItem>
+                  </>
+                )}
             </TableOptionsList>
           </Box>
         </>

@@ -374,7 +374,6 @@ export const managerApprovalsSoApiSlice = createApi({
 
         // Transform the response data from array to object with quarter numbers as keys
         const quartersArray = response?.d?.Result?.data || [];
-        console.log("quartersArray", quartersArray);
         const employee = response?.d?.Result?.Employee || {};
         const employeeDetails = {
           name: employee?.Name || "",
@@ -386,7 +385,6 @@ export const managerApprovalsSoApiSlice = createApi({
 
         // Convert array to object with quarter numbers as keys
         const quartersObject = quartersArray?.reduce((acc, quarterData) => {
-          console.log("quarterData", quarterData);
           acc[quarterData?.Quarter] = {
             quarter: quarterData?.Quarter,
             objectives: quarterData?.Objectives || [],
@@ -545,7 +543,7 @@ export const managerApprovalsSoApiSlice = createApi({
 
     getRequestDigest: builder.mutation({
       query: () => ({
-        url: `_api/contextinfo`,
+        url: `${import.meta.env.VITE_BASE_URL}_api/contextinfo`,
         method: "POST",
         headers: {
           "Accept": "application/json;odata=verbose"
@@ -558,7 +556,7 @@ export const managerApprovalsSoApiSlice = createApi({
 
     createAchievementByManager: builder.mutation({
       query: ({ data, digest }) => ({
-        url: `_api/web/lists/getbytitle('Achievement')/items`,
+        url: `${import.meta.env.VITE_BASE_URL}_api/web/lists/getbytitle('Achievement')/items`,
         method: "POST",
         headers: {
           "Accept": "application/json;odata=verbose",
@@ -593,7 +591,7 @@ export const managerApprovalsSoApiSlice = createApi({
 
     uploadAchievementAttachment: builder.mutation({
       query: ({ achievementId, file, digest }) => ({
-        url: `_api/web/lists/getbytitle('Achievement')/items(${achievementId})/AttachmentFiles/add(FileName='${encodeURIComponent(file.name)}')`,
+        url: `${import.meta.env.VITE_BASE_URL}_api/web/lists/getbytitle('Achievement')/items(${achievementId})/AttachmentFiles/add(FileName='${encodeURIComponent(file.name)}')`,
         method: "POST",
         headers: {
           "Accept": "application/json;odata=verbose",

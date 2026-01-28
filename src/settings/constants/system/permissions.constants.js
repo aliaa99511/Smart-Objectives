@@ -26,6 +26,12 @@ const pagesForAllUsers = {
     icon: "GiTrophyCup",
     hasPermission: true,
   },
+  about: {
+    text: "About",
+    to: "/about",
+    icon: "CiCircleInfo",
+    hasPermission: true,
+  },
 };
 
 export const ROLES = {
@@ -42,31 +48,9 @@ export const ROLES = {
         SO?.status == "InProgress" && user?.userId == SO?.employeeId,
     },
   },
-  Manger: {
+  Manager: {
     pages: {
       ...pagesForAllUsers,
-      /* requestsAndApprovals: {
-        parentText: "Requests & Approvals",
-        parentIcon: "MdPendingActions",
-        childLinks: [
-          {
-            creationRequests: {
-              text: "creation Requests",
-              to: "/creationRequests",
-              icon: "MdSubdirectoryArrowRight",
-              hasPermission: true,
-            },
-          },
-          {
-            submissionRequests: {
-              text: "submission Requests",
-              to: "/submissionRequests",
-              icon: "MdSubdirectoryArrowRight",
-              hasPermission: true,
-            },
-          },
-        ],
-      }, */
       myTeam: {
         text: "My Team",
         to: "/myTeam",
@@ -154,4 +138,66 @@ export const ROLES = {
       },
     },
   },
+  CEO: {
+    pages: {
+      // CEO Dashboard - NO myObjectives here
+      dashboard: {
+        text: "Dashboard",
+        to: "/ceo/dashboard",
+        icon: "MdOutlineDashboard",
+        hasPermission: true,
+      },
+      // Manager pages (CEO can access manager features)
+      myTeam: {
+        text: "My Team",
+        to: "/myTeam",
+        icon: "MdOutlinePeople",
+        hasPermission: true,
+      },
+      createSmartObjectiveByManager: {
+        hasPermission: true,
+      },
+      createAchievementByManager: {
+        hasPermission: true,
+      },
+      currentObjectives: {
+        hasPermission: true,
+      },
+      certificateWithManager: {
+        hasPermission: true,
+      },
+      achievementsWithManager: {
+        hasPermission: true,
+      },
+      quarterLogWithManager: {
+        hasPermission: true,
+      },
+      // HR pages (CEO can access HR features)
+      myCompany: {
+        text: "Company",
+        to: "/myCompany",
+        icon: "ImTree",
+        hasPermission: true,
+      },
+      certificateWithHr: {
+        hasPermission: true,
+      },
+      quarterLogWithHr: {
+        hasPermission: true,
+      },
+      achievementsWithHr: {
+        hasPermission: true,
+      },
+      // Rankings
+      rankings: {
+        hasPermission: true,
+      },
+      about: {
+        text: "About",
+        to: "/about",
+        icon: "CiCircleInfo",
+        hasPermission: true,
+      },
+    }
+  }
 };

@@ -77,10 +77,10 @@ const MyCompany = () => {
         />
       )}
       {selectedDepartmentId &&
-      !isEmployeesLoading &&
-      !isEmployeesError &&
-      companyEmployees &&
-      companyEmployees.length > 0 ? (
+        !isEmployeesLoading &&
+        !isEmployeesError &&
+        companyEmployees &&
+        companyEmployees.length > 0 ? (
         <Grid container spacing={2}>
           {companyEmployees.map((member) => (
             <Grid size={{ xs: 12, md: 6, lg: 3 }} key={member.id}>

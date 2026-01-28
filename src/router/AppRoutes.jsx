@@ -7,10 +7,8 @@ import MyObjectives from "../pages/myObjectives/myObjectives.page";
 import QuartersLog from "../pages/quartersLog/quartersLog.page";
 import Certificates from "../pages/certificates/certificates.page";
 import MainLoader from "../components/general/mainLoader/mainLoader.component";
-import {
-  WithPermission,
-  WithProtected,
-} from "../helpers/customHooks/protectRoutes";
+import WithPermission from "../helpers/customHooks/protectRoutes";
+import { WithProtected } from "../helpers/customHooks/protectRoutes";
 import CreateSmartObjective from "../pages/createSmartObjective/createSmartObjective.page";
 import CreateSmartObjectiveByManager from "../pages/createSmartObjectiveByManager/createSmartObjectiveByManager.page";
 import MyTeam from "../pages/myTeam/myTeam.page";
@@ -34,6 +32,43 @@ import Achievements from "../pages/achievements/achievements";
 import AchievementsWithDepartmentManager from "../pages/achievementsWithDepartmentManager/achievementsWithDepartmentManager";
 import CreateAchievementByDepartmentManager from "../pages/createAchievementByDepartmentManager/createAchievementByDepartmentManager";
 import AchievementsWithHr from "../pages/achievementsWithHr/achievementsWithHr";
+import DashboardPage from "../pages/dashboard/dashboard.page";
+import About from "../pages/about/about.page";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import RankingsPage from "../pages/rankings/rankings.page";
+import { canAccessPage } from "../helpers/utilities/permissinUtilities/canAccessPage";
+
+const RootRedirector = () => {
+  const { data: userData, isLoading } = useFetchCurrentUserQuery();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && userData) {
+      // Check if user is CEO
+      const isCEO = userData?.roles?.includes("CEO");
+
+      // Debug: Check if user can access myObjectives
+      const canAccessMyObjectives = canAccessPage(userData, 'myObjectives');
+
+      if (isCEO) {
+        console.log('RootRedirector - Redirecting CEO to /ceo/dashboard');
+        navigate("/ceo/dashboard", { replace: true });
+      } else {
+        if (canAccessMyObjectives) {
+          navigate("/myObjectives", { replace: true });
+        } else {
+          // Check what pages the user can access
+          // For debugging, let's see what happens with a different route
+          navigate("/quartersLog", { replace: true });
+        }
+      }
+    }
+  }, [userData, isLoading, navigate]);
+
+  // Show loader while determining redirect
+  return isLoading ? <MainLoader /> : null;
+};
 
 const AppRoutes = () => {
   const { isLoading, error } = useFetchCurrentUserQuery();
@@ -59,7 +94,12 @@ const AppRoutes = () => {
       ),
       children: [
         {
-          path: "",
+          index: true,
+          element: <RootRedirector />,
+        },
+        // ADD THIS ROUTE - This is critical!
+        {
+          path: "myObjectives",
           element: (
             <WithPermission page="myObjectives">
               <MyObjectives />
@@ -87,6 +127,14 @@ const AppRoutes = () => {
           element: (
             <WithPermission page="achievements">
               <Achievements />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "about",
+          element: (
+            <WithPermission page="about">
+              <About />
             </WithPermission>
           ),
         },
@@ -122,7 +170,6 @@ const AppRoutes = () => {
             </WithPermission>
           ),
         },
-
         {
           path: "myTeam/createSmartObjectiveByManager",
           element: (
@@ -243,6 +290,22 @@ const AppRoutes = () => {
             </WithPermission>
           ),
         },
+        {
+          path: "ceo/dashboard",
+          element: (
+            <WithPermission page="dashboard">
+              <DashboardPage />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "rankings",
+          element: (
+            <WithPermission page="rankings">
+              <RankingsPage />
+            </WithPermission>
+          ),
+        },
       ],
     },
     {
@@ -279,3 +342,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+

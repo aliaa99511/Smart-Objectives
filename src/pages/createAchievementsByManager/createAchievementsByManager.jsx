@@ -33,14 +33,8 @@ const CreateAchievementByManager = () => {
         <Widget>
             <Breadcrumbs className={styles.breadcrumbs} aria-label="breadcrumb">
                 <Link to="/myTeam">my team</Link>
-                <div
-                    onClick={handleCurrentObjectives}
-                    className={styles.breadcrumbsLink}
-                >
-                    <span>{"current Objectives"}</span>
-                </div>
                 <div className={styles.pageName}>
-                    <span>{"create achievement"}</span>
+                    <span>{"Create Achievement"}</span>
                 </div>
             </Breadcrumbs>
             <Typography className={styles.title} variant="h6" fontWeight="bold">

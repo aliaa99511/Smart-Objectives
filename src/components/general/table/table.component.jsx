@@ -1,88 +1,65 @@
-import styles from "./table.module.css";
 import { DataGrid } from "@mui/x-data-grid";
 import { Alert } from "@mui/material";
 import { useState } from "react";
+import styles from "./table.module.css";
 
 const Table = ({
   rows,
   columns,
-  onRowClick = null,
   getRowId,
+  getRowHeight,
   rowsPerPage = 10,
-  totalRows = 0,
   page = 0,
   onPageChange = null,
   loading = false,
   error = null,
   messages = {
-    noRowsLabel: "no objectives were submitted",
+    noRowsLabel: "No data available",
     loadingLabel: "Loading...",
   },
 }) => {
-  // Local state for client-side pagination
   const [paginationModel, setPaginationModel] = useState({
-    page: page,
+    page,
     pageSize: rowsPerPage,
   });
 
-  // If there's an error, display an alert
   if (error) {
-    return (
-      <Alert severity="error" className={styles.errorAlert}>
-        {error.message || "An error occurred while loading data"}
-      </Alert>
-    );
+    return <Alert severity="error">{error.message}</Alert>;
   }
 
-  // When loading, provide a stable empty dataset to prevent reflows
-  const tableRows = loading ? [] : rows || [];
-
-  // Handle pagination model change
-  const handlePaginationModelChange = (newModel) => {
-    if (onPageChange) {
-      // Server-side pagination
-      onPageChange(newModel.page);
-    } else {
-      // Client-side pagination
-      setPaginationModel(newModel);
-    }
+  const handlePaginationModelChange = (model) => {
+    onPageChange ? onPageChange(model.page) : setPaginationModel(model);
   };
 
   return (
     <div className={styles.tableContainer}>
       <DataGrid
-        getRowId={getRowId}
-        rows={tableRows}
+        rows={loading ? [] : rows}
         columns={columns}
-        rowCount={loading ? 0 : totalRows || tableRows.length}
-        paginationMode={onPageChange ? "server" : "client"}
-        paginationModel={
-          onPageChange ? { page, pageSize: rowsPerPage } : paginationModel
-        }
+        getRowId={getRowId}
+        getRowHeight={getRowHeight}
+        loading={loading}
+        paginationModel={paginationModel}
         onPaginationModelChange={handlePaginationModelChange}
         pageSizeOptions={[rowsPerPage]}
+        disableColumnMenu
         localeText={{
           noRowsLabel: loading ? messages.loadingLabel : messages.noRowsLabel,
         }}
-        loading={loading}
-        autoHeight
-        disableColumnMenu
-        slotProps={{
-          loadingOverlay: {
-            variant: "skeleton",
-            noRowsVariant: "skeleton",
-          },
-        }}
-        onRowClick={onRowClick}
-        disableSelectionOnClick={!onRowClick} // Disable row selection if onRowClick is not provided
-        isRowSelectable={() => !!onRowClick} // Disable row selection if onRowClick is not provided
-        getRowClassName={(params) => (onRowClick ? styles.clickableRow : "")} // Conditionally apply CSS class to rows
         sx={{
-          "& .MuiDataGrid-row:hover": {
-            cursor: onRowClick ? "pointer" : "default",
+          "& .MuiDataGrid-row": {
+            minHeight: "65px !important",
+            maxHeight: "65px !important",
           },
-          "& .MuiDataGrid-columnHeader": {
-            cursor: "default",
+          "& .MuiDataGrid-cell": {
+            minHeight: "65px !important",
+            maxHeight: "65px !important",
+            display: "flex",
+            alignItems: "center",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "#F7F7F9",
+            borderBottom: "1px solid #E0E0E0",
           },
         }}
       />

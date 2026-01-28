@@ -7,6 +7,7 @@ import { TbTargetArrow, TbCategoryPlus } from "react-icons/tb";
 import { GiTrophyCup } from "react-icons/gi";
 import { PiTreeView } from "react-icons/pi";
 import { LiaCertificateSolid } from "react-icons/lia";
+import { CiCircleInfo } from "react-icons/ci";
 import {
   MdSubdirectoryArrowRight,
   MdPendingActions,
@@ -22,10 +23,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { usePendingRequestsNotificationQuery } from "../../../appState/apis/managerApprovalsSoApiSlice";
 import FeadbackForm from "../feadback/feadbackForm.compoenent";
+import { MdOutlineDashboard } from "react-icons/md";
 
 const SideBar = () => {
   const { data: userData, isLoading } = useFetchCurrentUserQuery();
-
   // Check if user has manager role and conditionally fetch notifications
   const isManager = userData?.roles?.some((role) => role === "Manger");
 
@@ -74,7 +75,9 @@ const SideBar = () => {
     MdOutlinePeople,
     ImTree,
     PiTreeView,
-    GiTrophyCup
+    GiTrophyCup,
+    CiCircleInfo,
+    MdOutlineDashboard
   };
 
   const handleChange = (panel) => (event, newExpanded) => {

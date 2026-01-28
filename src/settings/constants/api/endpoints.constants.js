@@ -11,7 +11,10 @@ export const ENDPOINTS = {
     get_current_user_info_for_img:
       "lists/GetByTitle('Employees')/items?$filter=Employee eq ",
   },
+  OrganizationDashBoard: {
+    Get: "/_layouts/15/Uranium.SmartObjectives.Sharepoint/OrganizationDashBoard.aspx/Get",
 
+  },
   smartObjectives: {
     create: `_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/Create`,
     myObjective: `_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetObjectives`,

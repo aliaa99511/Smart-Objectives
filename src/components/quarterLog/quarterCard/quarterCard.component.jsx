@@ -60,10 +60,10 @@ const QuarterCard = ({
           style={
             quarterData?.objectives?.length == 0
               ? {
-                  minHeight: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }
+                minHeight: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }
               : {}
           }
         >

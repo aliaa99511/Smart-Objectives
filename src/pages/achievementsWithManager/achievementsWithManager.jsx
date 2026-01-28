@@ -1,8 +1,8 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
-import { FormControl, Select, MenuItem, Box, Grid2 } from "@mui/material";
+import { FormControl, Select, MenuItem, Box, Grid2, Breadcrumbs } from "@mui/material";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import SkeletonLoader from "../../components/general/skeletonLoader/skeletonLoader";
 import Widget from "../../components/general/widget/widget.component";
@@ -172,6 +172,12 @@ const AchievementsWithManager = () => {
     return (
         <>
             <Widget>
+                <Breadcrumbs className={styles.breadcrumbs} aria-label="breadcrumb">
+                    <Link to="/myTeam">my team</Link>
+                    <div className={styles.pageName}>
+                        <span>{"Achievements Log"}</span>
+                    </div>
+                </Breadcrumbs>
                 <div className={styles.header}>
                     <h1 className={styles.title}>Achievements</h1>
                     <div>

@@ -9,7 +9,7 @@ const shouldUseLegacyProvider = semver.gte(nodeVersion, "17.0.0");
 
 // Command to run the server
 const nodeCommand = "node";
-const nodeArgs = shouldUseLegacyProvider 
+const nodeArgs = shouldUseLegacyProvider
   ? ["--openssl-legacy-provider", "server.js"]
   : ["server.js"];
 

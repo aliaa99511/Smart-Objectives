@@ -1,60 +1,85 @@
 import { ROLES } from "../../../settings/constants";
 
 export function getAccessibleRoutesSchema(user) {
-  if (!user || !user.roles) return [];
+  if (!user || !user.roles || !user.roles.length) return [];
 
   const accessibleRoutes = [];
+  const addedRoutes = new Set();
 
-  // Iterate through each role the user has
+  // Check if user has CEO role - CEO gets only CEO pages
+  if (user.roles.includes("CEO")) {
+    const ceoPages = ROLES.CEO?.pages;
+    if (ceoPages) {
+      Object.entries(ceoPages).forEach(([key, page]) => {
+        if (page?.to && page?.hasPermission && !page.parentText) {
+          const routeKey = `${page.to}_${page.text}`;
+          if (!addedRoutes.has(routeKey)) {
+            accessibleRoutes.push(page);
+            addedRoutes.add(routeKey);
+          }
+        }
+      });
+    }
+    // Don't add any other roles' pages for CEO
+    return accessibleRoutes;
+  }
+
+  // For non-CEO users, use the original logic
   for (const role of user.roles) {
-    const rolePages = ROLES[role]?.pages;
+    if (!ROLES[role]) continue;
 
+    const rolePages = ROLES[role]?.pages;
     if (rolePages) {
-      // Process regular pages
-      Object.entries(rolePages)?.forEach(([key, page]) => {
+      Object.entries(rolePages).forEach(([key, page]) => {
         // Handle regular pages
         if (page?.to && page?.hasPermission && !page.parentText) {
-          accessibleRoutes.push(page);
+          const routeKey = `${page.to}_${page.text}`;
+          if (!addedRoutes.has(routeKey)) {
+            accessibleRoutes.push(page);
+            addedRoutes.add(routeKey);
+          }
         }
 
         // Handle parent links with children
-        if (page.parentText && page.childLinks) {
-          // Check if any child has permission
+        if (page?.parentText && page?.childLinks) {
           const hasChildWithPermission = page.childLinks.some((childObj) => {
             const childKey = Object.keys(childObj)[0];
             return childObj[childKey]?.hasPermission;
           });
 
           if (hasChildWithPermission) {
-            // Create parent route
-            const parentRoute = {
-              text: page.parentText,
-              icon: page.parentIcon,
-              isParent: true,
-              children: [],
-            };
+            const parentKey = `parent_${page.parentText}`;
+            let parentRoute = accessibleRoutes.find(r => r.text === page.parentText);
 
-            // Add children with permission
+            if (!parentRoute) {
+              parentRoute = {
+                text: page.parentText,
+                icon: page.parentIcon,
+                isParent: true,
+                children: [],
+              };
+              accessibleRoutes.push(parentRoute);
+              addedRoutes.add(parentKey);
+            }
+
             page.childLinks.forEach((childObj) => {
               const childKey = Object.keys(childObj)[0];
               const child = childObj[childKey];
 
               if (child?.hasPermission) {
-                parentRoute.children.push(child);
+                const childExists = parentRoute.children.some(
+                  c => c.text === child.text
+                );
+                if (!childExists) {
+                  parentRoute.children.push(child);
+                }
               }
             });
-
-            accessibleRoutes.push(parentRoute);
           }
         }
       });
     }
   }
 
-  // Remove duplicates (in case the user has overlapping roles)
-  return Array.from(
-    new Map(
-      accessibleRoutes?.map((route) => [route?.to + route?.text, route])
-    ).values()
-  );
+  return accessibleRoutes;
 }

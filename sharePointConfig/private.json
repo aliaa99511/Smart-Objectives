@@ -1,7 +1,7 @@
 {
   "siteUrl": "http://172.191.7.149:9352",
   "strategy": "OnpremiseUserCredentials",
-  "username": "hr",
-  "password": "d1ef1e01189d724821730d511e822c004ba6940d4bc85cf1eca32c6a1b0c983bdaae69a8ebb186eb4c4c27fde14c3381OtJpaKP/EHRrkJdlL3XzFQ==",
+  "username": "sm01703",
+  "password": "dba609c76b5a1bfe3cfb888426055f7d15e599868eb2b007b7fc230b26e773e7a6e01970ba347d037c31707e1a55b854yVDTrfxLuSI0pc8TKmh4yw==",
   "domain": "Dev.azure"
 }
