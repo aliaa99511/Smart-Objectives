@@ -1,17 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_HEADERS, ENDPOINTS } from "../../settings/constants";
+import { formatSharePointDate } from "../../helpers/utilities/formatSharePointDate";
 
 export const smartObjectiveApiSlice = createApi({
   reducerPath: "smartObjectives",
   baseQuery: fetchBaseQuery({
     baseUrl: "",
   }),
-  tagTypes: ["SmartObjectives", "QuartersLog", "Certificates", "OrganizationDashboard"],
+  tagTypes: [
+    "SmartObjectives",
+    "QuartersLog",
+    "Certificates",
+    "OrganizationDashboard",
+  ],
   endpoints: (builder) => ({
     createSmartObjective: builder.mutation({
       query: (objectiveData) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.create
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.create
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: objectiveData,
@@ -38,8 +45,9 @@ export const smartObjectiveApiSlice = createApi({
     // New query to fetch smart objectives
     getMySmartObjectives: builder.query({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.myObjective
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.myObjective
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: { ...payload },
@@ -59,6 +67,7 @@ export const smartObjectiveApiSlice = createApi({
           progress: item?.Progress,
           details: item?.Details,
           assignedOn: item?.AssignedOn || "__",
+          creationDate: formatSharePointDate(item?.CreationDate),
           id: item?.ID,
         }));
         const smartObjectivesOverView = {
@@ -74,9 +83,9 @@ export const smartObjectiveApiSlice = createApi({
           completionRate: response?.d?.Result?.SmartObjectivesOverView?.Result
             ?.CompletionRate
             ? Math.floor(
-              response?.d?.Result?.SmartObjectivesOverView?.Result
-                ?.CompletionRate
-            )
+                response?.d?.Result?.SmartObjectivesOverView?.Result
+                  ?.CompletionRate,
+              )
             : 0,
         };
         return {
@@ -90,8 +99,9 @@ export const smartObjectiveApiSlice = createApi({
     // New query to fetch smart objective details
     getSmartObjectiveDetails: builder.query({
       query: (objectiveId) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.objectiveDetails
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.objectiveDetails
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: { ObjectiveID: objectiveId },
@@ -113,6 +123,7 @@ export const smartObjectiveApiSlice = createApi({
           submittedOn: data?.SubmittedOn,
           status: data?.Status,
           assignedOn: data?.AssignedOn,
+          creationDate: formatSharePointDate(data?.CreationDate),
           details: data?.Details,
           measurable: data?.Measurable,
           achievable: data?.Achievable,
@@ -137,8 +148,9 @@ export const smartObjectiveApiSlice = createApi({
     // Add update smart objective mutation
     updateSmartObjective: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.update
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.update
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -170,8 +182,9 @@ export const smartObjectiveApiSlice = createApi({
     // Add update progress mutation
     updateSmartObjectiveProgress: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.updateProgress
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.updateProgress
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -197,8 +210,9 @@ export const smartObjectiveApiSlice = createApi({
     // Add this mutation to your existing smartObjectiveApiSlice.js file
     submitAchievement: builder.mutation({
       query: (payload) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.submitAchievement
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.submitAchievement
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: payload,
@@ -226,8 +240,9 @@ export const smartObjectiveApiSlice = createApi({
     // Add quarters log query
     getQuartersLog: builder.query({
       query: ({ year, employeeId = null }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.quartersLog
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.quartersLog
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -240,7 +255,7 @@ export const smartObjectiveApiSlice = createApi({
         if (!response?.d?.IsSuccess) {
           // Throw an error with the message from the API
           throw new Error(
-            response?.d?.Message || "Failed to retrieve quarters log data"
+            response?.d?.Message || "Failed to retrieve quarters log data",
           );
         }
 
@@ -270,8 +285,9 @@ export const smartObjectiveApiSlice = createApi({
 
     getCertificates: builder.query({
       query: ({ year, employeeId = null }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.employee.getCertificates
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.employee.getCertificates
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -284,7 +300,7 @@ export const smartObjectiveApiSlice = createApi({
         if (!response?.d?.IsSuccess) {
           // Throw an error with the message from the API
           throw new Error(
-            response?.d?.Message || "Failed to retrieve certificates data"
+            response?.d?.Message || "Failed to retrieve certificates data",
           );
         }
 
@@ -307,9 +323,10 @@ export const smartObjectiveApiSlice = createApi({
     getAchievementsLogByEmployeeID: builder.query({
       query: ({ employeeId = null }) => {
         let params = {
-          $select: "*,Employee/Id,Employee/Title,Department/Id,Department/Title",
+          $select:
+            "*,Employee/Id,Employee/Title,Department/Id,Department/Title",
           $expand: "Employee,AttachmentFiles,Department",
-          $orderby: "Created desc",
+          $orderby: "Date desc",
         };
 
         if (employeeId) {
@@ -342,17 +359,16 @@ export const smartObjectiveApiSlice = createApi({
 
         const result = response.d.Result;
         /* ================= Departments ================= */
-        const departments = (result.AchievedObjectives || [])
-          .map((d) => ({
-            name: d.DepartmentName,
-            objectiveCount: d.ObjectiveCount,
-            achievedCount: d.AchievedObjectiveCount,
-            progress: d.ProgressPercentage,
-          }))
+        const departments = (result.AchievedObjectives || []).map((d) => ({
+          name: d.DepartmentName,
+          objectiveCount: d.ObjectiveCount,
+          achievedCount: d.AchievedObjectiveCount,
+          progress: d.ProgressPercentage,
+        }));
 
         const maxObjectiveCount = Math.max(
           ...departments.map((d) => d.objectiveCount),
-          0
+          0,
         );
 
         /* ================= Top Achievers ================= */
@@ -372,10 +388,11 @@ export const smartObjectiveApiSlice = createApi({
           (c) => ({
             name: c.Category,
             value: c.ProgressPercentage, // ✅ IMPORTANT
-          })
+          }),
         );
 
-        const maxCategoryProgress = result.TopCategories?.MaxProgressPercentage?.ProgressPercentage ?? 0;
+        const maxCategoryProgress =
+          result.TopCategories?.MaxProgressPercentage?.ProgressPercentage ?? 0;
         /* ================= Overview ================= */
         const overview = {
           total: result.Overview.ObjectiveTotalCount,
@@ -431,9 +448,8 @@ export const smartObjectiveApiSlice = createApi({
     //   providesTags: ["Rankings"],
     // })
 
-
     getAchieversRanking: builder.query({
-      query: ({ year, departmentId, achieversCount = 0 }) => {
+      query: ({ year, departmentId, achieversCount = 0, userId = 0 }) => {
         const isAllDepartments = !departmentId || departmentId === 0;
 
         const url = isAllDepartments
@@ -442,14 +458,15 @@ export const smartObjectiveApiSlice = createApi({
 
         const body = isAllDepartments
           ? {
-            year,
-            achieversCount,
-          }
+              year,
+              achieversCount,
+            }
           : {
-            year,
-            departmentId,
-            achieversCount,
-          };
+              year,
+              departmentId,
+              achieversCount,
+              userId,
+            };
 
         return {
           url,
@@ -467,8 +484,7 @@ export const smartObjectiveApiSlice = createApi({
       },
 
       providesTags: ["Rankings"],
-    })
-
+    }),
   }),
 });
 

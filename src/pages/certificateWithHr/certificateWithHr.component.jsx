@@ -17,6 +17,8 @@ import { useGetCertificatesQuery } from "../../appState/apis/smartObjectiveApiSl
 import CertificatesContainer from "../../components/certificates/certificatesContainer/certificatesContainer.component";
 import MainLoader from "../../components/general/mainLoader/mainLoader.component";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
+import useScrollRestoration from "../../hooks/useScrollRestoration";
+import { savePositionAndNavigate } from "../../hooks/navigationHelper";
 
 const CertificateWithHr = () => {
   const [years, setYears] = useState([]);
@@ -30,39 +32,29 @@ const CertificateWithHr = () => {
 
   // Get employeeId from location state or session storage for page refreshes
   useEffect(() => {
-    // First try to get from location state
     if (location.state?.employeeId) {
       setEmployeeId(location.state.employeeId);
-      // Store in session storage for page refreshes
       sessionStorage.setItem("currentEmployeeId", location.state.employeeId);
-
-      // Clear the location state after using it
       window.history.replaceState({}, document.title);
     } else {
-      // If not in state (e.g., after page refresh), try session storage
       const storedEmployeeId = sessionStorage.getItem("currentEmployeeId");
       if (storedEmployeeId) {
         setEmployeeId(storedEmployeeId);
       } else {
-        // If not found anywhere, redirect to myCompany
-        navigate("/myCompany");
+        savePositionAndNavigate('certificate', navigate, "/myCompany");
       }
     }
   }, [location, navigate]);
 
   useEffect(() => {
-    // Get years array starting from 2015 to current year
     const yearsArray = getYearsArray(2015);
     setYears(yearsArray);
-
-    // Check if year is in URL params
 
     const yearParam = searchParams.get("year");
 
     if (yearParam) {
       setSelectedYear(Number(yearParam));
     } else {
-      // Set current year as default in URL if not already there
       updateYearInUrl(selectedYear);
     }
   }, [location.search]);
@@ -81,12 +73,13 @@ const CertificateWithHr = () => {
   };
 
   const handleYearChange = (event) => {
+    saveScrollPosition();
     const newYear = event.target.value;
     setSelectedYear(newYear);
     updateYearInUrl(newYear);
   };
 
-  // Fetch quarters log data using RTK Query
+  // Fetch certificates data using RTK Query
   const {
     data: certificates,
     isLoading,
@@ -98,6 +91,10 @@ const CertificateWithHr = () => {
     year: selectedYear,
     employeeId: employeeId,
   });
+
+  // Use scroll restoration hook
+  const shouldRestore = !isLoading && !isFetching && certificates;
+  const { saveScrollPosition } = useScrollRestoration('certificate', shouldRestore);
 
   return (
     <>

@@ -30,7 +30,11 @@ import ObjectiveOverviewCard from "../../components/general/objectiveOverviewCar
 import { TbTargetArrow } from "react-icons/tb";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { GoAlertFill } from "react-icons/go";
-import { MdBarChart, MdAccessTimeFilled, MdOutlineCalendarToday } from "react-icons/md";
+import {
+  MdBarChart,
+  MdAccessTimeFilled,
+  MdOutlineCalendarToday,
+} from "react-icons/md";
 import TopOne from "../../assets/top-1.svg";
 import TopTwo from "../../assets/top-2.svg";
 import TopThree from "../../assets/top-3.svg";
@@ -39,6 +43,9 @@ import { quarterOptions } from "../../settings/constants/options/quarterOptions"
 import { getYearsArray } from "../../helpers/utilities/getYearsArray";
 import Widget from "../../components/general/widget/widget.component";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { formatDecimal } from "../../helpers/utilities/formatDecimal";
+import { getYearAndQuarter } from "../../helpers/utilities/getYearAndQuarter";
 
 /* ================= Tooltip ================= */
 const DepartmentTooltip = ({ active, payload }) => {
@@ -55,20 +62,22 @@ const DepartmentTooltip = ({ active, payload }) => {
 };
 
 /* ================= Colors ================= */
-const CATEGORY_COLORS = [
-  "#4F46E5",
-  "#6366F1",
-  "#818CF8",
-  "#C7D2FE",
-  "#E5E7EB",
-];
+const CATEGORY_COLORS = ["#4F46E5", "#6366F1", "#818CF8", "#C7D2FE", "#E5E7EB"];
 
 /* ================= Loading Components ================= */
 const OverviewLoadingSkeleton = () => (
   <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 1.35 }}>
     {[...Array(5)].map((_, index) => (
-      <Card key={index} sx={{ p: 2.5, borderRadius: 3, flex: 1, minWidth: 180 }}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+      <Card
+        key={index}
+        sx={{ p: 2.5, borderRadius: 3, flex: 1, minWidth: 180 }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={2}
+        >
           <Box>
             <Skeleton variant="text" width={100} height={20} />
             <Skeleton variant="text" width={80} height={30} />
@@ -82,9 +91,16 @@ const OverviewLoadingSkeleton = () => (
 );
 
 const DepartmentChartLoading = () => (
-  <Card sx={{ pt: 1, borderRadius: 3, overflow: 'hidden', height: 340 }}>
+  <Card sx={{ pt: 1, borderRadius: 3, overflow: "hidden", height: 340 }}>
     <Skeleton variant="text" width={250} height={24} sx={{ m: 1.5, ml: 2 }} />
-    <Box sx={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <Box
+      sx={{
+        height: 280,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <CircularProgress />
     </Box>
   </Card>
@@ -102,11 +118,34 @@ const TopAchieversLoading = () => (
     <Grid2 container spacing={2}>
       {[...Array(3)].map((_, index) => (
         <Grid2 size={{ xs: 12, md: 4 }} key={index}>
-          <Card variant="outlined" sx={{ p: 2, borderRadius: 3, textAlign: "center" }}>
-            <Skeleton variant="circular" width={50} height={50} sx={{ mx: 'auto', my: 2 }} />
-            <Skeleton variant="text" width={120} height={24} sx={{ mx: 'auto' }} />
-            <Skeleton variant="text" width={100} height={16} sx={{ mx: 'auto' }} />
-            <Skeleton variant="rectangular" width={120} height={40} sx={{ mx: 'auto', mt: 2, borderRadius: 10 }} />
+          <Card
+            variant="outlined"
+            sx={{ p: 2, borderRadius: 3, textAlign: "center" }}
+          >
+            <Skeleton
+              variant="circular"
+              width={50}
+              height={50}
+              sx={{ mx: "auto", my: 2 }}
+            />
+            <Skeleton
+              variant="text"
+              width={120}
+              height={24}
+              sx={{ mx: "auto" }}
+            />
+            <Skeleton
+              variant="text"
+              width={100}
+              height={16}
+              sx={{ mx: "auto" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={120}
+              height={40}
+              sx={{ mx: "auto", mt: 2, borderRadius: 10 }}
+            />
           </Card>
         </Grid2>
       ))}
@@ -119,7 +158,14 @@ const CategoriesLoading = () => (
     <Skeleton variant="text" width={180} height={24} />
     <Skeleton variant="text" width={250} height={16} sx={{ mb: 2 }} />
 
-    <Box sx={{ height: 180, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <Box
+      sx={{
+        height: 180,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <CircularProgress />
     </Box>
 
@@ -140,7 +186,11 @@ const CategoriesLoading = () => (
         <Skeleton variant="text" width={120} height={16} />
         <Skeleton variant="text" width={40} height={24} />
       </Stack>
-      <Skeleton variant="rectangular" height={12} sx={{ mt: 1, borderRadius: 5 }} />
+      <Skeleton
+        variant="rectangular"
+        height={12}
+        sx={{ mt: 1, borderRadius: 5 }}
+      />
     </Box>
   </Card>
 );
@@ -151,10 +201,12 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Get year and quarter from URL or use defaults
+  const { year: defaultYear, quarter: defaultQuarter } = getYearAndQuarter();
   // State for filters
   const [years, setYears] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedQuarter, setSelectedQuarter] = useState(1);
+  const [selectedYear, setSelectedYear] = useState(defaultYear);
+  const [selectedQuarter, setSelectedQuarter] = useState(defaultQuarter);
   const [isFiltering, setIsFiltering] = useState(false);
   const previousFilters = useRef({ year: null, quarter: null });
 
@@ -193,7 +245,7 @@ const DashboardPage = () => {
         pathname: location.pathname,
         search: searchParams.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -207,7 +259,7 @@ const DashboardPage = () => {
         pathname: location.pathname,
         search: searchParams.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -218,7 +270,10 @@ const DashboardPage = () => {
     // Check if filter actually changed
     if (newYear !== selectedYear) {
       setIsFiltering(true);
-      previousFilters.current = { year: selectedYear, quarter: selectedQuarter };
+      previousFilters.current = {
+        year: selectedYear,
+        quarter: selectedQuarter,
+      };
       setSelectedYear(newYear);
       updateYearInUrl(newYear);
     }
@@ -229,18 +284,22 @@ const DashboardPage = () => {
     // Check if filter actually changed
     if (quarterId !== selectedQuarter) {
       setIsFiltering(true);
-      previousFilters.current = { year: selectedYear, quarter: selectedQuarter };
+      previousFilters.current = {
+        year: selectedYear,
+        quarter: selectedQuarter,
+      };
       setSelectedQuarter(quarterId);
       updateQuarterInUrl(quarterId);
     }
   };
 
   // Fetch dashboard data with filters
-  const { data, isLoading, isError, refetch, isFetching } = useGetOrganizationDashboardQuery({
-    year: selectedYear,
-    quarter: selectedQuarter,
-    topAchieverCount: 3,
-  });
+  const { data, isLoading, isError, refetch, isFetching } =
+    useGetOrganizationDashboardQuery({
+      year: selectedYear,
+      quarter: selectedQuarter,
+      topAchieverCount: 3,
+    });
 
   // Reset filtering state when data loads
   useEffect(() => {
@@ -296,7 +355,7 @@ const DashboardPage = () => {
     },
     {
       title: "Completion Rate",
-      count: overview.completionRate || 0,
+      count: formatDecimal(overview.completionRate || 0),
       unit: "%",
       icon: MdBarChart,
       iconColor: "#3789E8",
@@ -308,12 +367,18 @@ const DashboardPage = () => {
     <Box>
       {/* Header with Filters */}
       <Widget>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h6" fontWeight="bold">
             Organization Dashboard
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             {/* Loading indicator for filters */}
             {isFiltering && isFetching && (
               <CircularProgress size={20} sx={{ mr: 1 }} />
@@ -394,7 +459,7 @@ const DashboardPage = () => {
             )}
 
             {/* ================= Main Content Grid ================= */}
-            <Grid2 container spacing={2} sx={{ width: '100%', margin: 0 }}>
+            <Grid2 container spacing={2} sx={{ width: "100%", margin: 0 }}>
               {/* ================= LEFT COLUMN (9) ================= */}
               <Grid2 size={{ xs: 12, md: 8.5 }}>
                 <Stack spacing={2}>
@@ -402,40 +467,58 @@ const DashboardPage = () => {
                   {showLoading ? (
                     <DepartmentChartLoading />
                   ) : departments.length > 0 ? (
-                    <Card sx={{ pt: 1, borderRadius: 3, overflow: 'hidden' }}>
+                    <Card
+                      sx={{
+                        pt: 1,
+                        borderRadius: 2,
+                        border: "1.5px solid #E8E9EB",
+                        overflow: "hidden",
+                        boxShadow: "none",
+                      }}
+                    >
                       <Typography fontWeight={600} sx={{ p: 1.5, pl: 2 }}>
-                        Achieved Objectives by Department ({selectedYear} - Q{selectedQuarter})
+                        Achieved Objectives by Department ({selectedYear} - Q
+                        {selectedQuarter})
                       </Typography>
 
                       {/* Scrollable container */}
-                      <Box sx={{
-                        width: '100%',
-                        overflowX: 'auto',
-                        '&::-webkit-scrollbar': {
-                          height: 8,
-                        },
-                        '&::-webkit-scrollbar-track': {
-                          background: '#f1f1f1',
-                          borderRadius: 4,
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          background: '#888',
-                          borderRadius: 4,
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                          background: '#555',
-                        },
-                      }}>
-                        <Box sx={{
-                          minWidth: departments.length * 92,
-                          height: 280,
-                        }}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          overflowX: "auto",
+                          "&::-webkit-scrollbar": {
+                            height: 8,
+                          },
+                          "&::-webkit-scrollbar-track": {
+                            background: "#f1f1f1",
+                            borderRadius: 4,
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            background: "#888",
+                            borderRadius: 4,
+                          },
+                          "&::-webkit-scrollbar-thumb:hover": {
+                            background: "#555",
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            minWidth: departments.length * 92,
+                            height: 280,
+                          }}
+                        >
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                               data={departments}
                               barCategoryGap="20%"
                               barGap={-40}
-                              margin={{ top: 20, right: 20, left: -20, bottom: 10 }}
+                              margin={{
+                                top: 20,
+                                right: 20,
+                                left: -20,
+                                bottom: 10,
+                              }}
                             >
                               <XAxis
                                 dataKey="name"
@@ -449,7 +532,13 @@ const DashboardPage = () => {
                                 tick={{ fontSize: 12, fill: "#6B7280" }}
                                 allowDecimals={false}
                               />
-                              <Tooltip content={<DepartmentTooltip />} />
+                              <Tooltip
+                                content={<DepartmentTooltip />}
+                                cursor={{
+                                  fill: "transparent",
+                                  radius: 10,
+                                }}
+                              />
 
                               {/* BACK BAR → TOTAL OBJECTIVES */}
                               <Bar
@@ -472,9 +561,10 @@ const DashboardPage = () => {
                       </Box>
                     </Card>
                   ) : (
-                    <Card sx={{ p: 3, borderRadius: 3, textAlign: 'center' }}>
+                    <Card sx={{ p: 3, borderRadius: 3, textAlign: "center" }}>
                       <Typography color="text.secondary">
-                        No department data available for {selectedYear} - Q{selectedQuarter}
+                        No department data available for {selectedYear} - Q
+                        {selectedQuarter}
                       </Typography>
                     </Card>
                   )}
@@ -483,11 +573,29 @@ const DashboardPage = () => {
                   {showLoading ? (
                     <TopAchieversLoading />
                   ) : topAchievers.length > 0 ? (
-                    <Card sx={{ p: 2.5, borderRadius: 3 }}>
-                      <Stack direction="row" justifyContent="space-between" mb={1.2}>
+                    <Card
+                      sx={{
+                        p: 2.5,
+                        borderRadius: 2,
+                        border: "1.5px solid #E8E9EB",
+                        overflow: "hidden",
+                        boxShadow: "none",
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        mb={1.2}
+                      >
                         <Box>
-                          <Typography fontWeight={600}>Top 3 Achievers</Typography>
-                          <Typography fontSize={13} color="text.secondary" mb={2}>
+                          <Typography fontWeight={600}>
+                            Top 3 Achievers
+                          </Typography>
+                          <Typography
+                            fontSize={13}
+                            color="text.secondary"
+                            mb={2}
+                          >
                             Top performing Employees based on completion
                           </Typography>
                         </Box>
@@ -498,18 +606,24 @@ const DashboardPage = () => {
                           fontWeight={700}
                           sx={{
                             cursor: "pointer",
+                            display: "flex",
+                            gap: "5px",
+                            alignItems: "center",
                             "&:hover": {
                               textDecoration: "underline",
-                            }
+                            },
                           }}
-                          onClick={() => navigate("/rankings", {
-                            state: {
-                              year: selectedYear,
-                              quarter: selectedQuarter
-                            }
-                          })}
+                          onClick={() =>
+                            navigate("/rankings", {
+                              state: {
+                                year: selectedYear,
+                                quarter: selectedQuarter,
+                              },
+                            })
+                          }
                         >
-                          Full Rankings →
+                          <span>Full Rankings</span>
+                          <MdOutlineKeyboardArrowRight fontSize="20px" />
                         </Typography>
                       </Stack>
 
@@ -520,10 +634,14 @@ const DashboardPage = () => {
                               variant="outlined"
                               sx={{
                                 p: 2,
-                                borderRadius: 3,
+                                borderRadius: 2,
+                                border: "1.5px solid #E8E9EB",
+                                overflow: "hidden",
+                                boxShadow: "none",
                                 textAlign: "center",
                                 position: "relative",
-                                background: "#f7f7fc"
+                                background: "#f7f7fc",
+                                height: "100%",
                               }}
                             >
                               {/* Top Achiever Badge */}
@@ -540,9 +658,27 @@ const DashboardPage = () => {
                                   justifyContent: "center",
                                 }}
                               >
-                                {index === 0 && <img src={TopOne} alt="1st Place" style={{ width: "100%", height: "100%" }} />}
-                                {index === 1 && <img src={TopTwo} alt="2nd Place" style={{ width: "100%", height: "100%" }} />}
-                                {index === 2 && <img src={TopThree} alt="3rd Place" style={{ width: "100%", height: "100%" }} />}
+                                {index === 0 && (
+                                  <img
+                                    src={TopOne}
+                                    alt="1st Place"
+                                    style={{ width: "100%", height: "100%" }}
+                                  />
+                                )}
+                                {index === 1 && (
+                                  <img
+                                    src={TopTwo}
+                                    alt="2nd Place"
+                                    style={{ width: "100%", height: "100%" }}
+                                  />
+                                )}
+                                {index === 2 && (
+                                  <img
+                                    src={TopThree}
+                                    alt="3rd Place"
+                                    style={{ width: "100%", height: "100%" }}
+                                  />
+                                )}
                               </Box>
 
                               <Avatar
@@ -556,7 +692,9 @@ const DashboardPage = () => {
                                 }}
                               />
 
-                              <Typography fontWeight={600}>{item.name}</Typography>
+                              <Typography fontWeight={600}>
+                                {item.name}
+                              </Typography>
                               <Typography fontSize={13} color="text.secondary">
                                 {item.jobTitle}
                               </Typography>
@@ -572,18 +710,20 @@ const DashboardPage = () => {
                                   fontSize: 13,
                                   fontWeight: 600,
                                   display: "flex",
-                                  alignItems: "center"
+                                  alignItems: "center",
                                 }}
                               >
-                                <Box sx={{
-                                  background: theme.palette.primary.main,
-                                  color: "white",
-                                  borderRadius: "50%",
-                                  width: 25,
-                                  height: 24,
-                                  lineHeight: "24px",
-                                  mr: .5
-                                }}>
+                                <Box
+                                  sx={{
+                                    background: theme.palette.primary.main,
+                                    color: "white",
+                                    borderRadius: "50%",
+                                    width: 25,
+                                    height: 24,
+                                    lineHeight: "24px",
+                                    mr: 0.5,
+                                  }}
+                                >
                                   {item.achievementCount}
                                 </Box>
                                 Achievements
@@ -594,7 +734,7 @@ const DashboardPage = () => {
                       </Grid2>
                     </Card>
                   ) : (
-                    <Card sx={{ p: 3, borderRadius: 3, textAlign: 'center' }}>
+                    <Card sx={{ p: 3, borderRadius: 3, textAlign: "center" }}>
                       <Typography color="text.secondary">
                         No top achievers data available
                       </Typography>
@@ -604,12 +744,12 @@ const DashboardPage = () => {
               </Grid2>
 
               {/* ================= RIGHT COLUMN (3) ================= */}
-              <Grid2 size={{ xs: 12, md: 3.5 }}>
+              <Grid2 size={{ xs: 12, md: 3.5, boxShadow: "none" }}>
                 {showLoading ? (
                   <CategoriesLoading />
                 ) : categories.length > 0 ? (
                   <Card sx={{ p: 2.5, borderRadius: 3, height: "100%" }}>
-                    <Typography fontWeight={600} sx={{ mb: .7 }}>
+                    <Typography fontWeight={600} sx={{ mb: 0.7 }}>
                       Top Objectives Categories
                     </Typography>
                     <Typography fontSize={13} color="text.secondary" mb={2}>
@@ -625,24 +765,31 @@ const DashboardPage = () => {
                         justifyContent: "center",
                       }}
                     >
-                      <ResponsiveContainer width="100%" height="100%">
+                      <ResponsiveContainer
+                        width="100%"
+                        height="100%"
+                        sx={{ boxShadow: "none" }}
+                      >
                         <PieChart>
                           <Pie
                             data={categories}
                             dataKey="value"
                             cx="50%"
                             cy="50%"
-                            innerRadius={55}
-                            outerRadius={75}
+                            innerRadius={45}
+                            outerRadius={90}
                             startAngle={90}
                             endAngle={-270}
                             paddingAngle={2}
                             stroke="none"
+                            cornerRadius={5}
                           >
                             {categories.map((_, i) => (
                               <Cell
                                 key={i}
-                                fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
+                                fill={
+                                  CATEGORY_COLORS[i % CATEGORY_COLORS.length]
+                                }
                               />
                             ))}
                           </Pie>
@@ -651,14 +798,18 @@ const DashboardPage = () => {
                     </Box>
 
                     {/* Legend */}
-                    <Stack spacing={1.2} mt={3}>
+                    <Stack spacing={1.2} mt={3} sx={{ boxShadow: "none" }}>
                       {categories.map((c, i) => (
                         <Stack
                           key={c.name}
                           direction="row"
                           justifyContent="space-between"
                         >
-                          <Stack direction="row" spacing={1} alignItems="center">
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                          >
                             <Box
                               sx={{
                                 width: 10,
@@ -681,9 +832,13 @@ const DashboardPage = () => {
                     <Box sx={{ background: "#f7f7fc", px: 1.5, py: 2, mt: 8 }}>
                       <Stack direction="row" justifyContent="space-between">
                         <Typography fontSize={13} color="text.secondary">
-                          Top category: {categories[0]?.name}
+                          <strong>Top category:</strong> {categories[0]?.name}
                         </Typography>
-                        <Typography fontSize={17} fontWeight={800} color="primary">
+                        <Typography
+                          fontSize={17}
+                          fontWeight={800}
+                          color="primary"
+                        >
                           {maxCategoryProgress}%
                         </Typography>
                       </Stack>
@@ -704,7 +859,17 @@ const DashboardPage = () => {
                     </Box>
                   </Card>
                 ) : (
-                  <Card sx={{ p: 3, borderRadius: 3, height: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Card
+                    sx={{
+                      p: 3,
+                      borderRadius: 3,
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "none",
+                    }}
+                  >
                     <Typography color="text.secondary" textAlign="center">
                       No category data available
                     </Typography>

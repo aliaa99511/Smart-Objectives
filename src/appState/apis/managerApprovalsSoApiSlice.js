@@ -3,6 +3,9 @@ import { API_HEADERS, BASEURLS, ENDPOINTS } from "../../settings/constants";
 import { formatSharePointDate } from "../../helpers/utilities/formatSharePointDate";
 import { extractText } from "../../helpers/utilities/extractText";
 
+const isDevOrTest =
+  import.meta.env.MODE === "development" || import.meta.env.MODE === "test";
+
 export const managerApprovalsSoApiSlice = createApi({
   reducerPath: "managerApprovalsSo",
   baseQuery: fetchBaseQuery({
@@ -20,8 +23,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Add the new pendingRequestsNotification endpoint
     pendingRequestsNotification: builder.query({
       query: () => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.pendingRequestsNotfication
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.pendingRequestsNotfication
+        }`,
         method: "POST",
         body: {},
         headers: API_HEADERS.DEFAULT,
@@ -42,8 +46,9 @@ export const managerApprovalsSoApiSlice = createApi({
 
     getTeamMemberSo: builder.query({
       query: ({ employeeId = null, year = 0, quarter = 0 }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.getSmartObjectives
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.getSmartObjectives
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -99,8 +104,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Add the getEmployeeDetails endpoint
     getEmployeeDetails: builder.query({
       query: (employeeId) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.getEmployeeDetails
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.getEmployeeDetails
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -158,8 +164,9 @@ export const managerApprovalsSoApiSlice = createApi({
     }),
     getMyDepartmentMembers: builder.query({
       query: ({ departmentId, year, quarter }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.getMyDepartmentMembers
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.getMyDepartmentMembers
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -198,8 +205,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Manager Accept mutation
     managerAccept: builder.mutation({
       query: ({ id, justification = "" }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.managerAccept
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.managerAccept
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -237,8 +245,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Manager Ignore mutation
     managerIgnore: builder.mutation({
       query: ({ id, justification = "" }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.managerIgnore
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.managerIgnore
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -277,8 +286,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Manager Approve mutation
     managerApprove: builder.mutation({
       query: ({ id, justification = "" }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.managerApprove
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.managerApprove
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -316,8 +326,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Manager Reject mutation
     managerReject: builder.mutation({
       query: ({ id, justification = "" }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.managerReject
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.managerReject
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -354,8 +365,9 @@ export const managerApprovalsSoApiSlice = createApi({
 
     getQuartersLogWithManager: builder.query({
       query: ({ year, employeeId = null }) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.quartersLog
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.quartersLog
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -368,7 +380,7 @@ export const managerApprovalsSoApiSlice = createApi({
         if (!response?.d?.IsSuccess) {
           // Throw an error with the message from the API
           throw new Error(
-            response?.d?.Message || "Failed to retrieve quarters log data"
+            response?.d?.Message || "Failed to retrieve quarters log data",
           );
         }
 
@@ -410,8 +422,9 @@ export const managerApprovalsSoApiSlice = createApi({
     }),
     getActivitiesForSO: builder.query({
       query: (objectiveId) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.getActivtesForSO
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.manager.getActivtesForSO
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: {
@@ -454,8 +467,9 @@ export const managerApprovalsSoApiSlice = createApi({
 
     createSmartObjectiveByManager: builder.mutation({
       query: (objectiveData) => ({
-        url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.smartObjectives.create
-          }`,
+        url: `${import.meta.env.VITE_BASE_URL}${
+          ENDPOINTS.smartObjectives.create
+        }`,
         method: "POST",
         headers: API_HEADERS.DEFAULT,
         body: objectiveData,
@@ -482,8 +496,9 @@ export const managerApprovalsSoApiSlice = createApi({
     // Download Bulk Template
     downloadBulkTemplate: builder.mutation({
       query: () => ({
-        url: `${import.meta.env.VITE_BASE_URL_PURE}${BASEURLS.forSharePointAPIs
-          }${ENDPOINTS.manager.downloadBulkTemplate}`,
+        url: `${import.meta.env.VITE_BASE_URL_PURE}${
+          BASEURLS.forSharePointAPIs
+        }${ENDPOINTS.manager.downloadBulkTemplate}`,
         method: "GET",
         responseHandler: async (response) => {
           // Handle binary response (Excel file)
@@ -516,8 +531,9 @@ export const managerApprovalsSoApiSlice = createApi({
         formData.append("excelFile", excelFile, excelFile.name);
 
         return {
-          url: `${import.meta.env.VITE_BASE_URL}${ENDPOINTS.manager.uploadBulkExcel
-            }`,
+          url: `${import.meta.env.VITE_BASE_URL}${
+            ENDPOINTS.manager.uploadBulkExcel
+          }`,
           method: "POST",
           body: formData,
         };
@@ -546,12 +562,12 @@ export const managerApprovalsSoApiSlice = createApi({
         url: `${import.meta.env.VITE_BASE_URL}_api/contextinfo`,
         method: "POST",
         headers: {
-          "Accept": "application/json;odata=verbose"
-        }
+          Accept: "application/json;odata=verbose",
+        },
       }),
       transformResponse: (response) => {
         return response?.d?.GetContextWebInformation?.FormDigestValue;
-      }
+      },
     }),
 
     createAchievementByManager: builder.mutation({
@@ -559,9 +575,9 @@ export const managerApprovalsSoApiSlice = createApi({
         url: `${import.meta.env.VITE_BASE_URL}_api/web/lists/getbytitle('Achievement')/items`,
         method: "POST",
         headers: {
-          "Accept": "application/json;odata=verbose",
+          Accept: "application/json;odata=verbose",
           "Content-Type": "application/json;odata=verbose",
-          "X-RequestDigest": digest
+          "X-RequestDigest": digest,
         },
 
         body: {
@@ -572,8 +588,8 @@ export const managerApprovalsSoApiSlice = createApi({
           Date: data.Date,
           Weight: data.Weight,
           EmployeeId: data.EmployeeId,
-          DepartmentId: data.DepartmentId
-        }
+          DepartmentId: data.DepartmentId,
+        },
       }),
 
       transformResponse: (response) => {
@@ -582,7 +598,7 @@ export const managerApprovalsSoApiSlice = createApi({
         return {
           IsSuccess: true,
           Id: data.Id,
-          Result: data
+          Result: data,
         };
       },
 
@@ -594,14 +610,70 @@ export const managerApprovalsSoApiSlice = createApi({
         url: `${import.meta.env.VITE_BASE_URL}_api/web/lists/getbytitle('Achievement')/items(${achievementId})/AttachmentFiles/add(FileName='${encodeURIComponent(file.name)}')`,
         method: "POST",
         headers: {
-          "Accept": "application/json;odata=verbose",
-          "X-RequestDigest": digest
+          Accept: "application/json;odata=verbose",
+          "X-RequestDigest": digest,
         },
 
         body: file,
       }),
     }),
 
+    getUnSubmittedObjectives: builder.query({
+      query: ({ year, quarter, managerId }) => ({
+        url: `${import.meta.env.VITE_BASE_URL_PURE}${isDevOrTest ? "" : "hr/"}${
+          BASEURLS.forSharePointAPIs
+        }${ENDPOINTS.manager.getUnSubmittedObjectives({ year, quarter, managerId })}`,
+        method: "GET",
+        headers: API_HEADERS.DEFAULT,
+      }),
+      transformResponse: (response) => {
+        const isSuccess = response?.d?.results;
+        if (!isSuccess) {
+          // If not successful, throw an error to trigger the rejected state
+          throw new Error(response?.d?.Message || "Operation failed");
+        }
+        const data = response?.d?.results;
+        return {
+          unsubmittedObjectivesCount: data?.length,
+          unsubmittedObjectives: data?.map((item) => {
+            return {
+              id: item?.Id,
+              title: item?.Title || "---",
+              employeeName: item?.Employee?.Title || "---",
+              progress: item?.Progress || 0,
+            };
+          }),
+        };
+      },
+      providesTags: ["CloseQuarter"],
+    }),
+    closeQuarter: builder.mutation({
+      query: ({ year, quarter }) => ({
+        url: `${import.meta.env.VITE_BASE_URL_PURE}${
+          BASEURLS.forSharePointAPIs
+        }${ENDPOINTS.manager.closeQuarter}`,
+        method: "POST",
+        headers: API_HEADERS.DEFAULT,
+        body: {
+          year,
+          quarter,
+        },
+      }),
+      transformResponse: (response) => {
+        const isSuccess = response?.d?.IsSuccess == true;
+        if (!isSuccess) {
+          // If not successful, throw an error to trigger the rejected state
+          throw new Error(response?.d?.Message || "Operation failed");
+        }
+        return response?.d;
+      },
+      invalidatesTags: [
+        "MyTeam",
+        "TeamMemberSO",
+        "QuartersLogWithManager",
+        "CloseQuarter",
+      ],
+    }),
   }),
 });
 
@@ -625,5 +697,6 @@ export const {
   useGetRequestDigestMutation,
   useCreateAchievementByManagerMutation,
   useUploadAchievementAttachmentMutation,
-
+  useGetUnSubmittedObjectivesQuery,
+  useCloseQuarterMutation,
 } = managerApprovalsSoApiSlice;

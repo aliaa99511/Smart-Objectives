@@ -5,7 +5,8 @@ import styles from "./sideBar.module.css";
 import { getAccessibleRoutesSchema } from "../../../helpers/utilities/permissinUtilities/getAccessibleRoutesSchema";
 import { TbTargetArrow, TbCategoryPlus } from "react-icons/tb";
 import { GiTrophyCup } from "react-icons/gi";
-import { PiTreeView } from "react-icons/pi";
+import { PiTreeView, PiSuitcaseSimpleBold } from "react-icons/pi";
+
 import { LiaCertificateSolid } from "react-icons/lia";
 import { CiCircleInfo } from "react-icons/ci";
 import {
@@ -35,7 +36,7 @@ const SideBar = () => {
     {
       skip: !isManager, // Skip this query if user is not a manager
       pollingInterval: 60000, // Poll every minute to check for new notifications
-    }
+    },
   );
 
   const routes = getAccessibleRoutesSchema(userData);
@@ -52,7 +53,7 @@ const SideBar = () => {
       for (const route of routes) {
         if (route.isParent && route.children && route.children.length > 0) {
           const hasActiveChild = route.children.some(
-            (child) => child.to === pathname
+            (child) => child.to === pathname,
           );
 
           if (hasActiveChild) {
@@ -77,7 +78,8 @@ const SideBar = () => {
     PiTreeView,
     GiTrophyCup,
     CiCircleInfo,
-    MdOutlineDashboard
+    MdOutlineDashboard,
+    PiSuitcaseSimpleBold,
   };
 
   const handleChange = (panel) => (event, newExpanded) => {
@@ -92,7 +94,6 @@ const SideBar = () => {
     }
     return false;
   };
-
   const isNotfication =
     notificationsData?.pendingObjectivesCount !== undefined
       ? notificationsData.pendingObjectivesCount
@@ -151,6 +152,7 @@ const SideBar = () => {
                           <NavLink
                             key={child.text}
                             to={child.to}
+                            state={{ fromNavigation: true }}
                             className={({ isActive }) =>
                               [
                                 isActive ? styles.active : "",
@@ -169,7 +171,9 @@ const SideBar = () => {
                                 style={{ marginRight: "8px", fontSize: "20px" }}
                               />
                             )}
-                            <span>{child.text}</span>
+                            <span className={styles.childLinkText}>
+                              {child.text}
+                            </span>
                           </NavLink>
                         );
                       })}

@@ -17,6 +17,26 @@
   align-items: center;
   gap: 10px;
 }
-.filter {
+.filter:nth-child(1),
+.filter:nth-child(2) {
+  width: fit-content;
+}
+
+.filter:nth-child(3) {
   width: 250px;
+}
+.viewToggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  padding: 7px;
+}
+
+.activeView {
+  background-color: #f7f6fb !important;
+  color: var(--primary-color-d) !important;
+  border: 1px solid #36239663 !important;
+  border-radius: 4px !important;
 }

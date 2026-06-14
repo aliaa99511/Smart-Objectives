@@ -1,3 +1,5 @@
+import { isDateOutsideCurrentQuarter } from "../../../helpers/utilities/isDateOutsideCurrentQuarter";
+
 const pagesForAllUsers = {
   createSmartObjective: {
     hasPermission: true,
@@ -41,11 +43,17 @@ export const ROLES = {
     },
     smartObjective: {
       update: (user, SO) =>
-        SO?.status == "Pending" && user?.userId == SO?.employeeId,
+        SO?.status == "Pending" &&
+        user?.userId == SO?.employeeId &&
+        !isDateOutsideCurrentQuarter(SO?.creationDate),
       updateProgress: (user, SO) =>
-        SO?.status == "InProgress" && user?.userId == SO?.employeeId,
+        SO?.status == "InProgress" &&
+        user?.userId == SO?.employeeId &&
+        !isDateOutsideCurrentQuarter(SO?.creationDate),
       submitObjective: (user, SO) =>
-        SO?.status == "InProgress" && user?.userId == SO?.employeeId,
+        SO?.status == "InProgress" &&
+        user?.userId == SO?.employeeId &&
+        !isDateOutsideCurrentQuarter(SO?.creationDate),
     },
   },
   Manager: {
@@ -92,11 +100,34 @@ export const ROLES = {
   HR: {
     pages: {
       ...pagesForAllUsers,
-      myCompany: {
-        text: "Company",
-        to: "/myCompany",
-        icon: "ImTree",
-        hasPermission: true,
+      company: {
+        parentText: "Company",
+        parentIcon: "PiSuitcaseSimpleBold",
+        parentIconLibrary: "pi",
+        childLinks: [
+          {
+            myCompany: {
+              text: "Company Objectives",
+              to: "/myCompany",
+              icon: "",
+              hasPermission: true,
+            },
+          },
+          {
+            myCompanyAchievements: {
+              text: "Company Achievements",
+              to: "/myCompanyAchievements",
+              icon: "",
+              hasPermission: true,
+            },
+          },
+          {
+            companyAchievements: {
+              to: "/myCompanyAchievements/achievements",
+              hasPermission: true,
+            },
+          },
+        ],
       },
       currentObjectives: {
         hasPermission: true,
@@ -173,11 +204,34 @@ export const ROLES = {
         hasPermission: true,
       },
       // HR pages (CEO can access HR features)
-      myCompany: {
-        text: "Company",
-        to: "/myCompany",
-        icon: "ImTree",
-        hasPermission: true,
+      company: {
+        parentText: "Company",
+        parentIcon: "PiSuitcaseSimpleBold",
+        parentIconLibrary: "pi",
+        childLinks: [
+          {
+            myCompany: {
+              text: "Company Objectives",
+              to: "/myCompany",
+              icon: "",
+              hasPermission: true,
+            },
+          },
+          {
+            myCompanyAchievements: {
+              text: "Company Achievements",
+              to: "/myCompanyAchievements",
+              icon: "",
+              hasPermission: true,
+            },
+          },
+          {
+            companyAchievements: {
+              to: "/myCompanyAchievements/achievements",
+              hasPermission: true,
+            },
+          },
+        ],
       },
       certificateWithHr: {
         hasPermission: true,
@@ -198,6 +252,6 @@ export const ROLES = {
         icon: "CiCircleInfo",
         hasPermission: true,
       },
-    }
-  }
+    },
+  },
 };

@@ -110,6 +110,9 @@ override - table
   border-color: transparent !important;
   text-transform: capitalize;
 }
+.MuiDataGrid-virtualScrollerContent {
+  margin: 10px 0 20px 0 !important;
+}
 /*last row*/
 .MuiDataGrid-root .MuiDataGrid-withBorderColor {
   border-color: transparent !important;
@@ -148,6 +151,9 @@ override - table
 .MuiDataGrid-cell[data-field="title"].MuiDataGrid-cellSkeleton {
   display: flex !important;
 }
+.MuiDataGrid-filler {
+  display: none !important;
+}
 
 /*****************************
 override - options list
@@ -177,6 +183,7 @@ override - Grid
 ******************************/
 .MuiGrid2-root {
   gap: 10px !important;
+  /* flex: auto !important; */
 }
 /*****************************
 override - progress Slider
@@ -193,6 +200,11 @@ override - progress Slider
   font-weight: 700 !important;
   font-size: 8px !important;
 }
+.MuiPaper-root {
+  box-shadow: none !important;
+  border: 1.5px solid #e8e8e8 !important;
+  border-radius: 10px !important;
+}
 /*****************************
 Custom classes
 ******************************/
@@ -207,4 +219,18 @@ Custom classes
 }
 .input-skeleton {
   margin-bottom: 5px;
+}
+
+/* Hide actions by default */
+.actionsCell {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Show when row is hovered */
+.MuiDataGrid-row:hover .actionsCell {
+  opacity: 1;
+}
+.Mui-error {
+  text-transform: initial !important;
 }

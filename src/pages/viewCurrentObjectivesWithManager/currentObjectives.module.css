@@ -48,6 +48,9 @@
 .filter {
   width: 200px;
 }
+.filter:first-child {
+  width: 100px;
+}
 .details {
   display: flex;
   justify-content: space-between;

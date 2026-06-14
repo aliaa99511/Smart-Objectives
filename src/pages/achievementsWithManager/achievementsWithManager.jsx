@@ -1,258 +1,351 @@
-
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
-import { FormControl, Select, MenuItem, Box, Grid2, Breadcrumbs } from "@mui/material";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  Box,
+  Grid2,
+  Breadcrumbs,
+  Skeleton,
+} from "@mui/material";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import SkeletonLoader from "../../components/general/skeletonLoader/skeletonLoader";
 import Widget from "../../components/general/widget/widget.component";
 import AchievementsCard from "../../components/general/myAchievements/achievementsCard.component";
-import styles from "./achievementsWithManager.module.css"
+import styles from "./achievementsWithManager.module.css";
 import { useGetAchievementsLogByEmployeeIDQuery } from "../../appState/apis/smartObjectiveApiSlice";
+import { useGetMyTeamQuery } from "../../appState/apis/managerApprovalsSoApiSlice";
+import AutoCompleteSelector from "../../components/general/autoCompleteSelector/autoCompleteSelector.component";
+import UserInfo from "../../components/general/userInfo/userInfo.component";
+import { getYearsArray } from "../../helpers/utilities/getYearsArray";
 
 const AchievementsWithManager = () => {
-    const [years, setYears] = useState([]);
-    const [employeeId, setEmployeeId] = useState(null);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    const navigate = useNavigate();
-    const location = useLocation();
+  const [years, setYears] = useState([]);
+  const [employeeId, setEmployeeId] = useState(null);
 
-    // Memoize updateYearInUrl to prevent unnecessary recreations
-    const updateYearInUrl = useCallback((year) => {
-        const searchParams = new URLSearchParams(location.search);
-        searchParams.set("year", year);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const navigate = useNavigate();
+  const location = useLocation();
 
-        navigate(
-            {
-                pathname: location.pathname,
-                search: searchParams.toString(),
-            },
-            { replace: true }
-        );
-    }, [location.pathname, location.search, navigate]);
+  // Memoize updateYearInUrl to prevent unnecessary recreations
+  const updateYearInUrl = useCallback(
+    (year) => {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set("year", year);
 
-    useEffect(() => {
-        // First try to get from location state
-        if (location.state?.employeeId) {
-            setEmployeeId(location.state.employeeId);
-            // Store in session storage for page refreshes
-            sessionStorage.setItem("currentEmployeeId", location.state.employeeId);
+      navigate(
+        {
+          pathname: location.pathname,
+          search: searchParams.toString(),
+        },
+        { replace: true },
+      );
+    },
+    [location.pathname, location.search, navigate],
+  );
 
-            // Clear the location state after using it
-            window.history.replaceState({}, document.title);
-        } else {
-            // If not in state (e.g., after page refresh), try session storage
-            const storedEmployeeId = sessionStorage.getItem("currentEmployeeId");
-            if (storedEmployeeId) {
-                setEmployeeId(storedEmployeeId);
-            } else {
-                // If not found anywhere, redirect to myTeam
-                navigate("/myTeam");
-            }
+  useEffect(() => {
+    // First try to get from location state
+    if (location.state?.employeeId) {
+      setEmployeeId(location.state.employeeId);
+      // Store in session storage for page refreshes
+      sessionStorage.setItem("currentEmployeeId", location.state.employeeId);
+
+      // Clear the location state after using it
+      window.history.replaceState({}, document.title);
+    } else {
+      // If not in state (e.g., after page refresh), try session storage
+      const storedEmployeeId = sessionStorage.getItem("currentEmployeeId");
+      if (storedEmployeeId) {
+        setEmployeeId(storedEmployeeId);
+      } else {
+        // If not found anywhere, redirect to myTeam
+        navigate("/myTeam");
+      }
+    }
+  }, [location, navigate]);
+
+  // Fetch achievements data filtered by employeeId
+  const {
+    data: achievementsData = [],
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGetAchievementsLogByEmployeeIDQuery(
+    {
+      employeeId: employeeId,
+    },
+    {
+      skip: !employeeId, // Skip the query if employeeId is not available
+    },
+  );
+
+  const handleYearChange = (event) => {
+    const newYear = event.target.value;
+    setSelectedYear(newYear);
+    updateYearInUrl(newYear);
+  };
+
+  // Get all available years from achievements for the dropdown
+  const allYearsFromData = useMemo(() => {
+    const yearsSet = new Set();
+
+    achievementsData.forEach((item) => {
+      if (item.Date) {
+        try {
+          const date = new Date(item.Date);
+          const year = date.getFullYear();
+          if (!isNaN(year)) {
+            yearsSet.add(year);
+          }
+        } catch (e) {
+          console.warn("Invalid date format:", item.Date);
         }
-    }, [location, navigate]);
-
-    // Fetch achievements data filtered by employeeId
-    const {
-        data: achievementsData = [],
-        isLoading,
-        isFetching,
-        isError,
-        error,
-        refetch,
-    } = useGetAchievementsLogByEmployeeIDQuery({
-        employeeId: employeeId,
-    }, {
-        skip: !employeeId, // Skip the query if employeeId is not available
+      }
     });
 
-    const handleYearChange = (event) => {
-        const newYear = event.target.value;
-        setSelectedYear(newYear);
-        updateYearInUrl(newYear);
+    const yearsArray = Array.from(yearsSet);
+    if (yearsArray.length === 0) {
+      yearsArray.push(new Date().getFullYear());
+    }
+
+    return yearsArray.sort((a, b) => b - a);
+  }, [achievementsData]);
+
+  // Filter achievements by selected year
+  const filteredAchievements = useMemo(() => {
+    return achievementsData.filter((achievement) => {
+      if (achievement.Date) {
+        try {
+          const date = new Date(achievement.Date);
+          const year = date.getFullYear();
+          return year === selectedYear;
+        } catch (e) {
+          return false;
+        }
+      }
+      return false;
+    });
+  }, [achievementsData, selectedYear]);
+
+  // Initialize years and selectedYear from URL or data
+  useEffect(() => {
+    // Get years from data or create default array
+    const yearsArray = getYearsArray(2015);
+    /*  let yearsArray;
+    if (allYearsFromData.length > 0) {
+      yearsArray = allYearsFromData;
+    } else {
+      // Helper function to create years array
+      const getYearsArray = (startYear) => {
+        const currentYear = new Date().getFullYear();
+        const years = [];
+        for (let year = startYear; year <= currentYear; year++) {
+          years.push(year);
+        }
+        return years.reverse();
+      };
+      yearsArray = getYearsArray(2015);
+    } */
+
+    setYears(yearsArray);
+
+    // Parse year from URL
+    const searchParams = new URLSearchParams(location.search);
+    const yearParam = searchParams.get("year");
+
+    if (yearParam) {
+      const yearNum = Number(yearParam);
+      // Only update if different from current selectedYear
+      if (yearNum !== selectedYear) {
+        setSelectedYear(yearNum);
+      }
+    } else if (allYearsFromData.length > 0) {
+      const mostRecentYear = Math.max(...allYearsFromData);
+      if (mostRecentYear !== selectedYear) {
+        setSelectedYear(mostRecentYear);
+        updateYearInUrl(mostRecentYear);
+      }
+    }
+    // Don't update URL if selectedYear is already set and no URL param exists
+    // This prevents infinite loops
+  }, [allYearsFromData]); // Removed location.search from dependencies
+
+  // Handle URL changes separately
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const yearParam = searchParams.get("year");
+
+    if (yearParam) {
+      const yearNum = Number(yearParam);
+      if (yearNum !== selectedYear) {
+        setSelectedYear(yearNum);
+      }
+    }
+  }, [location.search]); // This only runs when URL changes externally
+
+  const {
+    data: team,
+    isLoading: isEmployeesLoading,
+    isError: isEmployeesError,
+  } = useGetMyTeamQuery({ year: selectedYear, quarter: 1 });
+  const employeeOptions = team?.map((member) => {
+    return {
+      Id: member.id,
+      Title: member.name,
+      img: member.img,
+      jobTitle: member.jobTitle,
     };
+  });
 
-    // Get all available years from achievements for the dropdown
-    const allYearsFromData = useMemo(() => {
-        const yearsSet = new Set();
+  const selectedEmployee = employeeOptions?.find(
+    (member) => member.Id == employeeId,
+  );
 
-        achievementsData.forEach(item => {
-            if (item.Date) {
-                try {
-                    const date = new Date(item.Date);
-                    const year = date.getFullYear();
-                    if (!isNaN(year)) {
-                        yearsSet.add(year);
-                    }
-                } catch (e) {
-                    console.warn('Invalid date format:', item.Date);
-                }
-            }
-        });
+  // Handle employee selection from dropdown
+  const handleEmployeeChange = (newEmployeeId) => {
+    // If the user clears the selection (makes it empty)
+    if (!newEmployeeId) {
+      // Clear session storage
+      sessionStorage.removeItem("currentEmployeeId");
+      // Redirect to myTeam page
+      navigate("/myTeam");
+      return;
+    }
 
-        const yearsArray = Array.from(yearsSet);
-        if (yearsArray.length === 0) {
-            yearsArray.push(new Date().getFullYear());
-        }
+    setEmployeeId(newEmployeeId);
+    sessionStorage.setItem("currentEmployeeId", newEmployeeId);
+    // Ensure location state is cleared when manually selecting a new employee
+    if (location.state?.employeeId) {
+      window.history.replaceState({}, document.title);
+    }
+  };
 
-        return yearsArray.sort((a, b) => b - a);
-    }, [achievementsData]);
+  // If no employeeId, don't render the component content
+  if (!employeeId) return null;
 
-    // Filter achievements by selected year
-    const filteredAchievements = useMemo(() => {
-        return achievementsData.filter(achievement => {
-            if (achievement.Date) {
-                try {
-                    const date = new Date(achievement.Date);
-                    const year = date.getFullYear();
-                    return year === selectedYear;
-                } catch (e) {
-                    return false;
-                }
-            }
-            return false;
-        });
-    }, [achievementsData, selectedYear]);
-
-    // Initialize years and selectedYear from URL or data
-    useEffect(() => {
-        // Get years from data or create default array
-        let yearsArray;
-        if (allYearsFromData.length > 0) {
-            yearsArray = allYearsFromData;
-        } else {
-            // Helper function to create years array
-            const getYearsArray = (startYear) => {
-                const currentYear = new Date().getFullYear();
-                const years = [];
-                for (let year = startYear; year <= currentYear; year++) {
-                    years.push(year);
-                }
-                return years.reverse();
-            };
-            yearsArray = getYearsArray(2015);
-        }
-
-        setYears(yearsArray);
-
-        // Parse year from URL
-        const searchParams = new URLSearchParams(location.search);
-        const yearParam = searchParams.get("year");
-
-        if (yearParam) {
-            const yearNum = Number(yearParam);
-            // Only update if different from current selectedYear
-            if (yearNum !== selectedYear) {
-                setSelectedYear(yearNum);
-            }
-        } else if (allYearsFromData.length > 0) {
-            const mostRecentYear = Math.max(...allYearsFromData);
-            if (mostRecentYear !== selectedYear) {
-                setSelectedYear(mostRecentYear);
-                updateYearInUrl(mostRecentYear);
-            }
-        }
-        // Don't update URL if selectedYear is already set and no URL param exists
-        // This prevents infinite loops
-    }, [allYearsFromData]); // Removed location.search from dependencies
-
-    // Handle URL changes separately
-    useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const yearParam = searchParams.get("year");
-
-        if (yearParam) {
-            const yearNum = Number(yearParam);
-            if (yearNum !== selectedYear) {
-                setSelectedYear(yearNum);
-            }
-        }
-    }, [location.search]); // This only runs when URL changes externally
-
-    return (
-        <>
-            <Widget>
-                <Breadcrumbs className={styles.breadcrumbs} aria-label="breadcrumb">
-                    <Link to="/myTeam">my team</Link>
-                    <div className={styles.pageName}>
-                        <span>{"Achievements Log"}</span>
-                    </div>
-                </Breadcrumbs>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>Achievements</h1>
-                    <div>
-                        <FormControl variant="outlined" size="small">
-                            <Select
-                                labelId="year-select-label"
-                                id="year-select"
-                                value={selectedYear}
-                                onChange={handleYearChange}
-                                startAdornment={
-                                    <Box sx={{ mr: 1, display: "flex", alignItems: "center" }}>
-                                        <MdOutlineCalendarToday />
-                                    </Box>
-                                }
-                                sx={{
-                                    minWidth: "120px",
-                                    "& .MuiSelect-select": {
-                                        display: "flex",
-                                        alignItems: "center",
-                                        paddingLeft: "8px",
-                                    },
-                                }}
-                            >
-                                {years.map((year) => (
-                                    <MenuItem key={year} value={year}>
-                                        {year}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </div>
-                </div>
-            </Widget>
-
-            <div>
-                {isLoading || isFetching ? (
-                    <SkeletonLoader count={6} />
-                ) : isError ? (
-                    <TryAgain
-                        minHeight="calc(100vh - 175px)"
-                        message="An error occurred while loading achievements"
-                        handleTryAgain={refetch}
-                    />
-                ) : filteredAchievements?.length === 0 ? (
-                    <Box sx={{ textAlign: "center", py: 8, color: "text.secondary" }}>
-                        No achievements found for {selectedYear}
+  return (
+    <>
+      <Widget>
+        <Breadcrumbs className={styles.breadcrumbs} aria-label="breadcrumb">
+          <Link to="/myTeam">my team</Link>
+          <div className={styles.pageName}>
+            <span>{"Achievements Log"}</span>
+          </div>
+        </Breadcrumbs>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Achievements</h1>
+          <div className={styles.filters}>
+            <div className={styles.filter}>
+              <FormControl variant="outlined" size="small">
+                <Select
+                  labelId="year-select-label"
+                  id="year-select"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  startAdornment={
+                    <Box sx={{ mr: 1, display: "flex", alignItems: "center" }}>
+                      <MdOutlineCalendarToday />
                     </Box>
-                ) : (
-                    <Grid2 container spacing={2} alignItems="stretch">
-                        {filteredAchievements.map((achievement) => (
-                            <Grid2 size={{ xs: 12, md: 6 }} key={achievement.Id} sx={{ display: 'flex' }}>
-                                <AchievementsCard achievement={achievement} style={{ flex: 1 }} />
-                            </Grid2>
-                        ))}
-                    </Grid2>
-                )}
+                  }
+                  sx={{
+                    minWidth: "120px",
+                    "& .MuiSelect-select": {
+                      display: "flex",
+                      alignItems: "center",
+                      paddingLeft: "8px",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                    },
+                  }}
+                >
+                  {years.map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </div>
-        </>
-    );
+            <div className={styles.filter}>
+              {!isEmployeesLoading ? (
+                <AutoCompleteSelector
+                  allSearchItems={employeeOptions}
+                  typeOfSelectedItem={"currentEmployeeId"}
+                  placeholder={"Select employee"}
+                  name={"employeeId"}
+                  disabled={isEmployeesLoading || isEmployeesError}
+                  useSessionStorage={true}
+                  onSelectionChange={handleEmployeeChange}
+                  initialValue={employeeId}
+                  disableClearable={true} // Prevent clearing the selection
+                />
+              ) : (
+                <Skeleton variant="rectangular" fullwidth="true" height={48} />
+              )}
+            </div>
+          </div>
+        </div>
+      </Widget>
+      <Widget>
+        <div className={styles.details}>
+          <div className="user">
+            <UserInfo
+              userData={{
+                name: selectedEmployee?.Title || "",
+                img: selectedEmployee?.img || "",
+                jobTitle: selectedEmployee?.jobTitle || "",
+                badge: selectedEmployee?.badge || "",
+              }}
+              imgSize="imgLG"
+              nameSize="nameSM"
+              isLoading={isEmployeesLoading}
+              fullRadius={false}
+              withNotfication={true}
+            />
+          </div>
+        </div>
+      </Widget>
+
+      <div>
+        {isLoading || isFetching ? (
+          <SkeletonLoader count={6} />
+        ) : isError ? (
+          <TryAgain
+            minHeight="calc(100vh - 175px)"
+            message="An error occurred while loading achievements"
+            handleTryAgain={refetch}
+          />
+        ) : filteredAchievements?.length === 0 ? (
+          <Box sx={{ textAlign: "center", py: 8, color: "text.secondary" }}>
+            No achievements found for {selectedYear}
+          </Box>
+        ) : (
+          <Grid2 container spacing={2} alignItems="stretch">
+            {filteredAchievements.map((achievement) => (
+              <Grid2
+                size={{ xs: 12, md: 6 }}
+                key={achievement.Id}
+                sx={{ display: "flex" }}
+              >
+                <AchievementsCard
+                  achievement={achievement}
+                  style={{ flex: 1 }}
+                />
+              </Grid2>
+            ))}
+          </Grid2>
+        )}
+      </div>
+    </>
+  );
 };
 
 export default AchievementsWithManager;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 // import { useNavigate, useLocation } from "react-router-dom";
@@ -515,15 +608,3 @@ export default AchievementsWithManager;
 // };
 
 // export default AchievementsWithManager;
-
-
-
-
-
-
-
-
-
-
-
-

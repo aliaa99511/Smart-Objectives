@@ -43,7 +43,7 @@ const CurrentObjectives = () => {
   const { year, quarter, quarterMonths } = getYearAndQuarter(
     undefined,
     quarterParam,
-    yearParam
+    yearParam,
   );
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const CurrentObjectives = () => {
         pathname: location.pathname,
         search: searchParams.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -96,7 +96,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "detailsSO",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -112,7 +112,7 @@ const CurrentObjectives = () => {
       year,
       quarter,
     },
-    { skip: !departmentId }
+    { skip: !departmentId },
   );
 
   // Fetch team member's smart objectives
@@ -130,7 +130,7 @@ const CurrentObjectives = () => {
     },
     {
       skip: !employeeId,
-    }
+    },
   );
 
   const employeeOptions = companyEmployees?.map((member) => {
@@ -189,7 +189,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "certficatesLog",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -286,6 +286,7 @@ const CurrentObjectives = () => {
       type: "actions",
       headerName: "",
       width: 50,
+      cellClassName: "actionsCell",
       getActions: (params) => [
         <GridActionsCellItem
           icon={<GridMoreVertIcon />}
@@ -300,7 +301,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "activeties",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };

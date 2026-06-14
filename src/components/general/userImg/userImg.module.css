@@ -38,6 +38,9 @@
   font-weight: bold;
   border: 2px solid white;
 }
+.withBorder {
+  border: 2px solid #705ccf;
+}
 
 /* sizes */
 

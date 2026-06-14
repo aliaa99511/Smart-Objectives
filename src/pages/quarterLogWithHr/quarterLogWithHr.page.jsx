@@ -34,6 +34,8 @@ import QuarterHeader from "../../components/general/quarterHeader/quarterHeader.
 import { isQuarterAfterCurrent } from "../../helpers/utilities/isQuarterAfterCurrent";
 import { showDrawer } from "../../appState/slices/drawerSlice";
 import { useDispatch } from "react-redux";
+import useScrollRestoration from "../../hooks/useScrollRestoration";
+import { savePositionAndNavigate } from "../../hooks/navigationHelper";
 
 const QuarterLogWithHr = () => {
   const [years, setYears] = useState([]);
@@ -49,22 +51,16 @@ const QuarterLogWithHr = () => {
 
   // Get employeeId from location state or session storage for page refreshes
   useEffect(() => {
-    // First try to get from location state
     if (location.state?.employeeId) {
       setEmployeeId(location.state.employeeId);
-      // Store in session storage for page refreshes
       sessionStorage.setItem("currentEmployeeId", location.state.employeeId);
-
-      // Clear the location state after using it
       window.history.replaceState({}, document.title);
     } else {
-      // If not in state (e.g., after page refresh), try session storage
       const storedEmployeeId = sessionStorage.getItem("currentEmployeeId");
       if (storedEmployeeId) {
         setEmployeeId(storedEmployeeId);
       } else {
-        // If not found anywhere, redirect to myTeam
-        navigate("/myTeam");
+        savePositionAndNavigate('quarterLog', navigate, "/myCompany");
       }
     }
   }, [location, navigate]);
@@ -83,22 +79,23 @@ const QuarterLogWithHr = () => {
       employeeId: employeeId,
     },
     {
-      skip: !employeeId, // Wait until we have an employee ID
+      skip: !employeeId,
     }
   );
 
+  // Use scroll restoration hook
+  const shouldRestore = !isLoading && !isFetching && quartersLogData;
+  const { saveScrollPosition } = useScrollRestoration('quarterLog', shouldRestore);
+
   useEffect(() => {
-    // Get years array starting from 2015 to current year
     const yearsArray = getYearsArray(2015);
     setYears(yearsArray);
 
-    // Check if year is in URL params
     const yearParam = searchParams.get("year");
 
     if (yearParam) {
       setSelectedYear(Number(yearParam));
     } else {
-      // Set current year as default in URL if not already there
       updateYearInUrl(selectedYear);
     }
   }, [location.search]);
@@ -117,9 +114,15 @@ const QuarterLogWithHr = () => {
   };
 
   const handleYearChange = (event) => {
+    saveScrollPosition();
     const newYear = event.target.value;
     setSelectedYear(newYear);
     updateYearInUrl(newYear);
+  };
+
+  const handleViewModeChange = (mode) => {
+    saveScrollPosition();
+    setViewMode(mode);
   };
 
   // Helper function to get table columns
@@ -207,6 +210,7 @@ const QuarterLogWithHr = () => {
   };
 
   const handleViewDetails = (selectedRow) => {
+    saveScrollPosition();
     dispatch(
       showDrawer({
         drawerType: "detailsSO",
@@ -260,7 +264,7 @@ const QuarterLogWithHr = () => {
             <div className={styles.viewToggle}>
               <Tooltip title="Grid View">
                 <IconButton
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => handleViewModeChange("grid")}
                   className={viewMode === "grid" ? styles.activeView : ""}
                   size="small"
                 >
@@ -269,7 +273,7 @@ const QuarterLogWithHr = () => {
               </Tooltip>
               <Tooltip title="List View">
                 <IconButton
-                  onClick={() => setViewMode("list")}
+                  onClick={() => handleViewModeChange("list")}
                   className={viewMode === "list" ? styles.activeView : ""}
                   size="small"
                 >

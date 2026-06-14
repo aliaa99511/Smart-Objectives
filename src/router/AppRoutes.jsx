@@ -13,6 +13,7 @@ import CreateSmartObjective from "../pages/createSmartObjective/createSmartObjec
 import CreateSmartObjectiveByManager from "../pages/createSmartObjectiveByManager/createSmartObjectiveByManager.page";
 import MyTeam from "../pages/myTeam/myTeam.page";
 import MyCompany from "../pages/myCompany/myCompany.page";
+import MyCompanyAchievements from "../pages/myCompanyAchievements/myCompanyAchievements.page";
 import CurrentObjectives from "../pages/viewCurrentObjectivesWithManager/currentObjectives.page";
 import CurrentObjectivesByDepartmentManager from "../pages/viewCurrentObjectivesWithDepartmentManager/currentObjectives.page";
 import CurrentObjectivesByHr from "../pages/viewCurrentObjectivesWithHr/currentObjectives.page";
@@ -38,6 +39,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import RankingsPage from "../pages/rankings/rankings.page";
 import { canAccessPage } from "../helpers/utilities/permissinUtilities/canAccessPage";
+import AchievementsLogForDepartment from "../pages/achievementsLogForDepartment/achievementsLogForDepartment.page";
 
 const RootRedirector = () => {
   const { data: userData, isLoading } = useFetchCurrentUserQuery();
@@ -49,10 +51,9 @@ const RootRedirector = () => {
       const isCEO = userData?.roles?.includes("CEO");
 
       // Debug: Check if user can access myObjectives
-      const canAccessMyObjectives = canAccessPage(userData, 'myObjectives');
+      const canAccessMyObjectives = canAccessPage(userData, "myObjectives");
 
       if (isCEO) {
-        console.log('RootRedirector - Redirecting CEO to /ceo/dashboard');
         navigate("/ceo/dashboard", { replace: true });
       } else {
         if (canAccessMyObjectives) {
@@ -151,6 +152,23 @@ const AppRoutes = () => {
           element: (
             <WithPermission page="myTeam">
               <MyTeam />
+            </WithPermission>
+          ),
+        },
+
+        {
+          path: "myCompanyAchievements",
+          element: (
+            <WithPermission page="myCompanyAchievements">
+              <MyCompanyAchievements />
+            </WithPermission>
+          ),
+        },
+        {
+          path: "myCompanyAchievements/achievements",
+          element: (
+            <WithPermission page="companyAchievements">
+              <AchievementsLogForDepartment />
             </WithPermission>
           ),
         },
@@ -342,4 +360,3 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
-

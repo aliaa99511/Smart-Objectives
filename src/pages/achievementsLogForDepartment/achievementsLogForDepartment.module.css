@@ -1,0 +1,91 @@
+.title {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  text-transform: capitalize;
+  color: #272727;
+  margin: 0 0 10px 0 !important;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px !important;
+}
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.departmentFilter,
+.employeeFilter {
+  width: 250px;
+}
+
+.menuItem {
+  text-transform: capitalize;
+  font-size: 14px !important;
+}
+.gridItem {
+  border: 1px solid #e8e9eb;
+  border-radius: 8px;
+  background-image: url("../../assets/achiveCup.svg");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-position-y: center;
+  background-size: 160px;
+}
+.card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.userImgContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.referenceItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  background-color: #dde0e361;
+  border-radius: 8px;
+  padding: 4px 8px;
+  width: fit-content;
+  max-width: 100%;
+}
+.referenceLink {
+  text-decoration: none;
+  color: #272727;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  text-transform: capitalize;
+  /* max-width: 90%; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.icon {
+  color: #705ccf !important;
+}
+.iconNot {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}

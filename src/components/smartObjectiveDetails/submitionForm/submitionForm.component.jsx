@@ -84,11 +84,24 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
 
   // Function to add the certificate
   const handleAddCertificate = () => {
-    if (!certificateName.trim()) {
+    const trimmedName = certificateName.trim();
+
+    // Empty name check
+    if (!trimmedName) {
       setFileNameError("Please enter a certificate name");
       return;
     }
 
+    // 🚫 Special characters validation
+    const validNameRegex = /^[a-zA-Z0-9 _-]+$/;
+    if (!validNameRegex.test(trimmedName)) {
+      setFileNameError(
+        "Certificate name can only contain letters, numbers, spaces, hyphens (-), and underscores (_)",
+      );
+      return;
+    }
+
+    // File check
     if (!selectedFile) {
       setFileNameError("");
       setFileError("Please select a file before adding a certificate");
@@ -101,22 +114,22 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
     const fileExtension = selectedFile.name.split(".").pop();
     const processedFile = new File(
       [selectedFile],
-      `${certificateName}.${fileExtension}`,
-      { type: selectedFile.type }
+      `${trimmedName}.${fileExtension}`,
+      { type: selectedFile.type },
     );
 
     // Check for duplicates
     const isDuplicate = existingFiles.some(
       (existingFile) =>
         existingFile.name === processedFile.name &&
-        existingFile.size === processedFile.size
+        existingFile.size === processedFile.size,
     );
 
     if (!isDuplicate) {
       setValue("certificates", [...existingFiles, processedFile]);
     }
 
-    // Reset certificate name, file input, and selected file
+    // Reset state
     setCertificateName("");
     fileInputRef.current.value = "";
     setSelectedFile(null);
@@ -127,7 +140,7 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
   // Function to remove a selected file
   const handleFileDelete = (index) => {
     const updatedFiles = getValues("certificates").filter(
-      (_, i) => i !== index
+      (_, i) => i !== index,
     );
     setValue("certificates", updatedFiles); // Update files
 
@@ -148,7 +161,7 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
     }
     if (certificateName) {
       setFileNameError(
-        "Please add a certificate before submitting or remove the certificate Name"
+        "Please add a certificate before submitting or remove the certificate Name",
       );
       return;
     }
@@ -179,17 +192,19 @@ const SubmitionForm = ({ onSubmit, isSubmitting }) => {
                     value="Achieved"
                     control={<Radio color="success" />}
                     label="Achieved"
-                    className={`${styles.radioLabel} ${field.value === "Achieved" ? styles.achievedRadio : ""
-                      }`}
+                    className={`${styles.radioLabel} ${
+                      field.value === "Achieved" ? styles.achievedRadio : ""
+                    }`}
                   />
                   <FormControlLabel
                     value="NotAchieved"
                     control={<Radio color="error" />}
                     label="Not Achieved"
-                    className={`${styles.radioLabel} ${field.value === "NotAchieved"
+                    className={`${styles.radioLabel} ${
+                      field.value === "NotAchieved"
                         ? styles.notAchievedRadio
                         : ""
-                      }`}
+                    }`}
                   />
                 </RadioGroup>
                 {errors.achievementStatus && (

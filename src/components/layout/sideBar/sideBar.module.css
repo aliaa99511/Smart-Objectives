@@ -60,6 +60,7 @@
 .childLink {
   padding: 16px 25px;
   color: #655a6d;
+  padding-left: 70px;
 }
 .link:not(:last-child),
 .childLink:not(:last-child) {

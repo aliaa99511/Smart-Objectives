@@ -9,6 +9,7 @@ const UserImg = ({
   isLoading = true,
   fullRadius = true,
   withNotfication = false,
+  withBorder = false,
 }) => {
   return (
     <div className={styles.imageContainer}>
@@ -23,7 +24,7 @@ const UserImg = ({
           alt={`${userName}'s profile`}
           className={`${styles.userImg} ${fullRadius && styles.fullRadius}  ${
             styles[imgSize]
-          }`}
+          } ${withBorder && styles.withBorder}`}
         />
       ) : (
         <div

@@ -23,7 +23,7 @@ import { showModal } from "../../../appState/slices/modalSlice";
 import {
   useCreateAchievementByManagerMutation,
   useGetRequestDigestMutation,
-  useUploadAchievementAttachmentMutation
+  useUploadAchievementAttachmentMutation,
 } from "../../../appState/apis/managerApprovalsSoApiSlice";
 import { useState, useRef, useCallback } from "react";
 import FileUploadPlaceholder from "../../smartObjectiveDetails/fileUploadPlaceholder/fileUploadPlaceholder.component";
@@ -37,7 +37,8 @@ const CreateAchievementForm = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [createAchievementByManager, { isLoading }] = useCreateAchievementByManagerMutation();
+  const [createAchievementByManager, { isLoading }] =
+    useCreateAchievementByManagerMutation();
   const [uploadAttachmentMutation] = useUploadAchievementAttachmentMutation();
   const [getDigest] = useGetRequestDigestMutation();
 
@@ -48,19 +49,44 @@ const CreateAchievementForm = ({
   const [files, setFiles] = useState([]);
 
   // Validation schema with Yup
+  const noHtmlRegex = /<[^>]*>/g;
+
   const schema = yup.object().shape({
-    achievementTitle: yup.string().required("Achievement title is required"),
-    Description: yup.string().required("Description is required"),
+    achievementTitle: yup
+      .string()
+      .trim() // removes leading/trailing spaces
+      .required("Achievement title is required")
+      .min(1, "Achievement title cannot be empty or spaces only")
+      .max(255, "Title must not exceed 255 characters")
+      .test(
+        "no-html",
+        "HTML tags are not allowed",
+        (value) => !noHtmlRegex.test(value || ""),
+      ),
+
+    Description: yup
+      .string()
+      .trim()
+      .required("Description is required")
+      .min(1, "Description cannot be empty or spaces only")
+      .test(
+        "no-html",
+        "HTML tags are not allowed",
+        (value) => !noHtmlRegex.test(value || ""),
+      ),
+
     Date: yup
       .date()
       .required("Date is required")
       .max(new Date(), "Date cannot be in the future")
       .typeError("Please enter a valid date"),
+
     Weight: yup
       .number()
       .required("Achievement weight is required")
       .min(1, "Weight must be at least 1")
       .max(5, "Weight must be at most 5"),
+
     attachments: yup.mixed(),
   });
 
@@ -90,18 +116,25 @@ const CreateAchievementForm = ({
     const validFiles = [];
     const errors = [];
 
-    selectedFiles.forEach(file => {
+    selectedFiles.forEach((file) => {
       // Validate file type
       const allowedTypes = [
-        'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
-        'application/pdf',
-        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'text/plain'
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/plain",
       ];
 
       if (!allowedTypes.includes(file.type)) {
-        errors.push(`Invalid file type: ${file.name}. Allowed types: Images, PDF, Word, Excel, Text.`);
+        errors.push(
+          `Invalid file type: ${file.name}. Allowed types: Images, PDF, Word, Excel, Text.`,
+        );
         return;
       }
 
@@ -115,10 +148,10 @@ const CreateAchievementForm = ({
     });
 
     if (errors.length > 0) {
-      setFileError(errors.join(' '));
+      setFileError(errors.join(" "));
     } else {
       setFileError("");
-      setFiles(prev => [...prev, ...validFiles]);
+      setFiles((prev) => [...prev, ...validFiles]);
     }
 
     // Reset file input
@@ -126,26 +159,42 @@ const CreateAchievementForm = ({
   }, []);
 
   // Function to remove a selected file
-  const handleFileDelete = useCallback((index) => {
-    const fileToDelete = files[index];
-    setFiles(prev => prev.filter((_, i) => i !== index));
-  }, [files]);
+  const handleFileDelete = useCallback(
+    (index) => {
+      const fileToDelete = files[index];
+      setFiles((prev) => prev.filter((_, i) => i !== index));
+    },
+    [files],
+  );
 
   // Function to upload attachments
   const uploadAttachments = useCallback(
     async (achievementId, filesToUpload, digest) => {
-
-      const uploadPromises = filesToUpload.map(file =>
+      const uploadPromises = filesToUpload.map((file) =>
         uploadAttachmentMutation({
           achievementId,
           file,
-          digest
-        }).unwrap()
+          digest,
+        }).unwrap(),
       );
 
-      await Promise.all(uploadPromises);
+      const results = await Promise.allSettled(uploadPromises);
 
-    }, [uploadAttachmentMutation]);
+      let successCount = 0;
+      let failedCount = 0;
+
+      results.forEach((result) => {
+        if (result.status === "fulfilled") {
+          successCount++;
+        } else {
+          failedCount++;
+        }
+      });
+
+      return { successCount, failedCount };
+    },
+    [uploadAttachmentMutation],
+  );
 
   const onSubmit = async (data) => {
     setIsSubmitting(true); // 🔹 loading from the very beginning
@@ -156,12 +205,17 @@ const CreateAchievementForm = ({
 
       // 2️⃣ Format date to UTC
       const date = new Date(data.Date);
-      const utcDate = new Date(Date.UTC(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        0, 0, 0, 0
-      ));
+      const utcDate = new Date(
+        Date.UTC(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+          0,
+          0,
+          0,
+          0,
+        ),
+      );
 
       // 3️⃣ Prepare payload
       const payload = {
@@ -174,50 +228,85 @@ const CreateAchievementForm = ({
       };
 
       // 4️⃣ Create achievement
-      const response = await createAchievementByManager({ data: payload, digest }).unwrap();
+      const response = await createAchievementByManager({
+        data: payload,
+        digest,
+      }).unwrap();
 
       if (response && response?.IsSuccess && response?.Id) {
         const achievementId = response.Id;
 
         // 5️⃣ Upload attachments if exist
         if (files.length > 0) {
-          await uploadAttachments(achievementId, files, digest);
-          showToast({
-            type: "success",
-            message: "Achievement created with attachments successfully",
-          });
+          const { successCount, failedCount } = await uploadAttachments(
+            achievementId,
+            files,
+            digest,
+          );
+
+          if (failedCount == 0) {
+            showToast({
+              type: "success",
+              messgae: `${successCount} attachment(s) uploaded successfully.`,
+            });
+            // 6️⃣ Reset form and files
+            reset({
+              achievementTitle: "",
+              Description: "",
+              Date: "",
+              Weight: 0,
+            });
+            setFiles([]);
+
+            dispatch(
+              showModal({
+                modalType: "createAchievementSuccess",
+                modalSize: "xs",
+                modalData: { redirctTo },
+              }),
+            );
+          } else if (successCount == 0) {
+            showToast({
+              type: "error",
+              messgae: `All ${failedCount} attachment(s) failed to upload.`,
+            });
+          } else {
+            showToast({
+              type: "warning",
+              messgae: `${successCount} uploaded successfully, ${failedCount} failed.`,
+            });
+          }
         } else {
-          showToast({
-            type: "success",
-            message: "Achievement created successfully",
+          // 6️⃣ Reset form and files
+          reset({
+            achievementTitle: "",
+            Description: "",
+            Date: "",
+            Weight: 0,
           });
+          setFiles([]);
+
+          dispatch(
+            showModal({
+              modalType: "createAchievementSuccess",
+              modalSize: "xs",
+              modalData: { redirctTo },
+            }),
+          );
         }
-
-        // 6️⃣ Reset form and files
-        reset({
-          achievementTitle: "",
-          Description: "",
-          Date: "",
-          Weight: 0,
-        });
-        setFiles([]);
-
-        dispatch(
-          showModal({
-            modalType: "createAchievementSuccess",
-            modalSize: "xs",
-            modalData: { redirctTo },
-          })
-        );
       } else {
-        const errorMessage = response?.Message || "Failed to create achievement";
-        showToast({ type: "error", message: errorMessage });
+        const errorMessage =
+          response?.Message || "Failed to create achievement";
+        showToast({ type: "error", messgae: errorMessage });
       }
     } catch (error) {
       console.error("Failed to create achievement:", error);
       showToast({
         type: "error",
-        message: error?.data?.Message || error?.message || "Something went wrong. Please try again later.",
+        messgae:
+          error?.data?.Message ||
+          error?.message ||
+          "Something went wrong. Please try again later.",
       });
     } finally {
       setIsSubmitting(false); // 🔹 turn off loading at the end
@@ -232,8 +321,54 @@ const CreateAchievementForm = ({
   const formatDateForDisplay = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   };
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+
+    if (!e.dataTransfer.files || e.dataTransfer.files.length === 0) return;
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+
+    // reuse your validation logic
+    const validFiles = [];
+    const errors = [];
+
+    droppedFiles.forEach((file) => {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/plain",
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        errors.push(`Invalid file type: ${file.name}`);
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        errors.push(`File too large: ${file.name}`);
+        return;
+      }
+
+      validFiles.push(file);
+    });
+
+    if (errors.length) {
+      setFileError(errors.join(" "));
+    } else {
+      setFileError("");
+      setFiles((prev) => [...prev, ...validFiles]);
+    }
+  }, []);
 
   return (
     <form
@@ -247,7 +382,9 @@ const CreateAchievementForm = ({
     >
       <Grid container spacing={2}>
         <Grid size={{ xs: 12 }}>
-          <Typography className={styles.inputTitle}>Achievement Title</Typography>
+          <Typography className={styles.inputTitle}>
+            Achievement Title
+          </Typography>
           <Controller
             name="achievementTitle"
             control={control}
@@ -267,9 +404,7 @@ const CreateAchievementForm = ({
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12 }}>
-          <Typography className={styles.inputTitle}>
-            Description
-          </Typography>
+          <Typography className={styles.inputTitle}>Description</Typography>
           <Controller
             name="Description"
             control={control}
@@ -287,7 +422,9 @@ const CreateAchievementForm = ({
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography className={styles.inputTitle}>Date</Typography>
+          <Typography className={styles.inputTitle}>
+            Achievement Date
+          </Typography>
           <Controller
             name="Date"
             control={control}
@@ -303,7 +440,7 @@ const CreateAchievementForm = ({
                     shrink: true,
                   }}
                   inputProps={{
-                    max: new Date().toISOString().split('T')[0],
+                    max: new Date().toISOString().split("T")[0],
                   }}
                   fullWidth
                 />
@@ -362,9 +499,7 @@ const CreateAchievementForm = ({
       {/* Attachments Section */}
       <Grid container spacing={2}>
         <Grid size={{ xs: 12 }}>
-          <Typography className={styles.inputTitle}>
-            Attachments
-          </Typography>
+          <Typography className={styles.inputTitle}>Attachments</Typography>
 
           {/* File Input */}
           <div className={styles.fileUploadContainer}>
@@ -374,13 +509,19 @@ const CreateAchievementForm = ({
               accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.txt"
               ref={fileInputRef}
               onChange={handleFileChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               multiple
             />
-            <div onClick={() => fileInputRef.current && fileInputRef.current.click()}>
-              <FileUploadPlaceholder
-                isError={!!fileError}
-              />
+            <div
+              onClick={() =>
+                fileInputRef.current && fileInputRef.current.click()
+              }
+              onDrop={handleDrop}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnter={(e) => e.preventDefault()}
+              onDragLeave={(e) => e.preventDefault()}
+            >
+              <FileUploadPlaceholder isError={!!fileError} />
             </div>
           </div>
 
@@ -403,9 +544,14 @@ const CreateAchievementForm = ({
             ))}
           </Box>
 
-          <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-            Max file size: 10MB per file. Allowed types: Images, PDF, Word, Excel, Text files.
-            Click the upload area to add files.
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            sx={{ mt: 1, textTransform: "initial" }}
+          >
+            Max file size: 10MB per file. Allowed types: Images, PDF, Word,
+            Excel, Text files. Click the upload area to add files.
           </Typography>
         </Grid>
       </Grid>
@@ -422,9 +568,9 @@ const CreateAchievementForm = ({
         <Button
           type="submit"
           variant="contained"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLoading}
         >
-          {isSubmitting ? <BtnLoader /> : "Submit"}
+          {isSubmitting || isLoading ? <BtnLoader /> : "Submit"}
         </Button>
       </div>
     </form>

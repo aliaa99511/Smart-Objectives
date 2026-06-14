@@ -11,3 +11,18 @@
   justify-content: space-between;
   align-items: center;
 }
+.newObj {
+  all: unset;
+  gap: 4px;
+  font-size: 12px;
+  border-radius: 8px;
+  background-color: #705ccf;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  width: 150px;
+  height: 44px;
+  cursor: pointer;
+}

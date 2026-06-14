@@ -1,10 +1,12 @@
-import { IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Slider, Typography } from "@mui/material";
 import styles from "./companyMemberCard.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UserImg from "../../general/userImg/userImg.component";
+import { SO_ATCHIVEMENT_STATUS } from "../../../settings/constants/status/smartObjective.status";
+import { savePositionAndNavigate } from "../../../hooks/navigationHelper";
 
 const CompanyMemberCard = ({ member, department }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -20,49 +22,74 @@ const CompanyMemberCard = ({ member, department }) => {
   };
 
   const handleCurrentObjectives = () => {
-    navigate(
-      `/myCompany/currentObjectives?departmentId=${department.id
-      }&departmentTitle=${encodeURIComponent(department.title)}`,
+    savePositionAndNavigate(
+      "myCompany",
+      navigate,
+      `/myCompany/currentObjectives?departmentId=${department.id}&departmentTitle=${encodeURIComponent(
+        department.title
+      )}`,
       {
         state: {
           employeeId: member.id,
         },
-      }
+      },
+      member.id
     );
+
     handleClose();
   };
 
   const handleQuarterLog = () => {
-    // Pass employee ID via state instead of URL parameter
-    navigate(
-      `/myCompany/quarterLog?departmentId=${department.id
-      }&departmentTitle=${encodeURIComponent(department.title)}`,
+    savePositionAndNavigate(
+      "myCompany",
+      navigate,
+      `/myCompany/quarterLog?departmentId=${department.id}&departmentTitle=${encodeURIComponent(
+        department.title
+      )}`,
       {
-        state: { employeeId: member.id },
-      }
+        state: {
+          employeeId: member.id,
+        },
+      },
+      member.id
     );
+
     handleClose();
   };
+
   const handleCertificate = () => {
-    // Pass employee ID via state instead of URL parameter
-    navigate(
-      `/myCompany/certificateWithHr?departmentId=${department.id
-      }&departmentTitle=${encodeURIComponent(department.title)}`,
+    savePositionAndNavigate(
+      "myCompany",
+      navigate,
+      `/myCompany/certificateWithHr?departmentId=${department.id}&departmentTitle=${encodeURIComponent(
+        department.title
+      )}`,
       {
-        state: { employeeId: member.id },
-      }
+        state: {
+          employeeId: member.id,
+        },
+      },
+      member.id
     );
+
     handleClose();
   };
+
   const handleAchievements = () => {
-    // Pass employee ID via state instead of URL parameter
-    navigate(
-      `/myCompany/achievementsWithHr?departmentId=${department.id
-      }&departmentTitle=${encodeURIComponent(department.title)}`,
+    savePositionAndNavigate(
+      "myCompany",
+      navigate,
+      `/myCompany/achievementsWithHr?departmentId=${department.id}&departmentTitle=${encodeURIComponent(
+        department.title
+      )}`,
       {
-        state: { employeeId: member.id },
-      }
+        state: {
+          employeeId: member.id,
+        },
+      },
+      member.id
     );
+
     handleClose();
   };
 
@@ -95,12 +122,70 @@ const CompanyMemberCard = ({ member, department }) => {
           >
             {member.jobTitle}
           </Typography>
-        </div>
-        <div className={styles.stats}>
           <div
             className={styles.stat}
           >{`${member.approveRequests} objectives`}</div>
         </div>
+        <div className={styles.statuses}>
+          <div
+            className={styles.status}
+            style={{
+              color:
+                SO_ATCHIVEMENT_STATUS["Achieved"]?.txtColor ||
+                SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor,
+              backgroundColor:
+                SO_ATCHIVEMENT_STATUS["Achieved"]?.BGColor ||
+                SO_ATCHIVEMENT_STATUS["defaultStatus"]?.BGColor,
+            }}
+          >
+            <span>{member.achievedObjectives}</span>
+            <span>Achieved</span>
+          </div>
+          <div
+            className={styles.status}
+            style={{
+              color: "#EF3535",
+              backgroundColor: "#FFEAEF",
+            }}
+          >
+            <span>{member.notAchievedObjectives}</span>
+            <span>Not Achieved</span>
+          </div>
+          <div
+            className={styles.status}
+            style={{
+              color:
+                SO_ATCHIVEMENT_STATUS["UnderReview"]?.txtColor ||
+                SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor,
+              backgroundColor:
+                SO_ATCHIVEMENT_STATUS["UnderReview"]?.BGColor ||
+                SO_ATCHIVEMENT_STATUS["defaultStatus"]?.BGColor,
+            }}
+          >
+            <span>{member.underReviewObjectives}</span>
+            <span>Under Review</span>
+          </div>
+        </div>
+        <Box style={{ width: "100%", marginTop: "10px" }}>
+          <Box style={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="body2" color="#72757C" fontSize="10px">
+              Completion rate
+            </Typography>
+            <Typography variant="body2" color="#705CCF" fontSize="12px">
+              {member?.completionRate}%
+            </Typography>
+          </Box>
+          <Slider
+            size="medium"
+            defaultValue={member?.completionRate}
+            value={member?.completionRate}
+            valueLabelFormat={(value) => `${value}%`}
+            aria-label="medium"
+            sx={{
+              cursor: "default",
+            }}
+          />
+        </Box>
       </div>
 
       <Menu
@@ -115,13 +200,13 @@ const CompanyMemberCard = ({ member, department }) => {
           Current Objectives
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleQuarterLog}>
-          quarters log
+          Quarters Log
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleCertificate}>
-          certificate
+          Certificate
         </MenuItem>
         <MenuItem className={styles.menuItem} onClick={handleAchievements}>
-          achievements
+          Achievements
         </MenuItem>
       </Menu>
     </div>

@@ -1,7 +1,7 @@
 .card {
   background: #fff;
   border-radius: 4px;
-  padding: 24px 16px;
+  padding: 24px 16px 6px 16px;
   border: 1px solid #f6f5f7;
   transition: all 0.3s ease;
   position: relative;
@@ -35,6 +35,11 @@
 .content {
   text-align: center;
   text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
 }
 
 .name {
@@ -58,7 +63,7 @@
 .stat {
   width: 90px;
   height: 24px;
-  background-color: #f3f1fc;
+  /* background-color: #f3f1fc; */
   color: #4e3da3;
   display: flex;
   justify-content: center;
@@ -78,4 +83,21 @@
   border-radius: 6px !important;
   background-color: #f3f1fc !important;
   color: #4e3da3 !important;
+}
+.statuses {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+}
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: 500;
 }

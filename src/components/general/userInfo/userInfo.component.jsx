@@ -29,9 +29,11 @@ const UserInfo = ({
         />
 
         <div className={styles.userInfoText}>
-          {userData?.badge && (
+          {isLoading ? (
+            <Skeleton width={90} />
+          ) : userData?.badge ? (
             <div className={`${styles.badge}`}>{userData?.badge}</div>
-          )}
+          ) : null}
           <div>
             {isLoading ? (
               <Skeleton width={90} />

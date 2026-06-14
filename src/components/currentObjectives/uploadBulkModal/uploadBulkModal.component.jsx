@@ -8,6 +8,7 @@ import { closeModal } from "../../../appState/slices/modalSlice";
 import { useUploadBulkExcelMutation } from "../../../appState/apis/managerApprovalsSoApiSlice";
 import { showToast } from "../../../helpers/utilities/showToast";
 import BtnLoader from "../../general/btnLoader/btnLoader.component";
+import { RiErrorWarningFill } from "react-icons/ri";
 
 const UploadBulkModal = ({ modalData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -98,42 +99,25 @@ const UploadBulkModal = ({ modalData }) => {
   const handleCancel = () => {
     dispatch(closeModal());
   };
+  const handleReUpload = () => {
+    setAlerts([]);
+    setSelectedFile(null);
+    setDragActive(false);
+    setMessage("");
+  };
 
   return (
     <Box className={styles.container}>
-      <Typography className={styles.title}>Upload Bulk Objectives</Typography>
-      <Typography className={styles.subtitle}>
-        please upload an excel(.xlsx) file containing your objectives.
+      <Typography className={styles.title}>
+        {alerts?.length > 0 ? "Bulk Alerts" : "Upload Bulk Objectives"}
       </Typography>
+      {alerts?.length == 0 && (
+        <Typography className={styles.subtitle}>
+          please upload an excel(.xlsx) file containing your objectives.
+        </Typography>
+      )}
 
-      <Box
-        className={`${styles.dropZone} ${dragActive ? styles.dragActive : ""} ${
-          selectedFile ? styles.hasFile : ""
-        }`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          id="file-upload"
-          accept=".xlsx,.xls"
-          onChange={handleFileChange}
-          className={styles.fileInput}
-        />
-        <label htmlFor="file-upload" className={styles.uploadLabel}>
-          <MdUploadFile className={styles.uploadIcon} />
-          <Typography className={styles.uploadText}>
-            <span className={styles.clickText}>Click to upload</span> or drag
-            and drop
-          </Typography>
-          <Typography className={styles.fileType}>
-            {selectedFile ? selectedFile.name : "Excel (.xlsx) file"}
-          </Typography>
-        </label>
-      </Box>
-      {alerts?.length > 0 && (
+      {alerts?.length > 0 ? (
         <Box sx={{ mb: 4 }}>
           {message && (
             <Typography className={styles.message}>{message}</Typography>
@@ -142,22 +126,61 @@ const UploadBulkModal = ({ modalData }) => {
           <Box className={styles.alerts}>
             {alerts.map((alert, index) => (
               <Typography key={index} className={styles.alert}>
-                {alert}
+                <RiErrorWarningFill />
+                <span>{alert}</span>
               </Typography>
             ))}
           </Box>
         </Box>
+      ) : (
+        <Box
+          className={`${styles.dropZone} ${dragActive ? styles.dragActive : ""} ${
+            selectedFile ? styles.hasFile : ""
+          }`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            id="file-upload"
+            accept=".xlsx,.xls"
+            onChange={handleFileChange}
+            className={styles.fileInput}
+          />
+          <label htmlFor="file-upload" className={styles.uploadLabel}>
+            <MdUploadFile className={styles.uploadIcon} />
+            <Typography className={styles.uploadText}>
+              <span className={styles.clickText}>Click to upload</span> or drag
+              and drop
+            </Typography>
+            <Typography className={styles.fileType}>
+              {selectedFile ? selectedFile.name : "Excel (.xlsx) file"}
+            </Typography>
+          </label>
+        </Box>
       )}
 
       <Box className={styles.actions}>
-        <Button
-          variant="contained"
-          onClick={handleUpload}
-          disabled={isLoading || !selectedFile}
-          className={styles.uploadButton}
-        >
-          {isLoading ? <BtnLoader color="white" /> : "Upload"}
-        </Button>
+        {alerts?.length > 0 ? (
+          <Button
+            variant="contained"
+            onClick={handleReUpload}
+            className={styles.uploadButton}
+          >
+            Re-upload
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={handleUpload}
+            disabled={isLoading || !selectedFile}
+            className={styles.uploadButton}
+          >
+            {isLoading ? <BtnLoader color="white" /> : "Upload"}
+          </Button>
+        )}
         <Button
           variant="outlined"
           onClick={handleCancel}

@@ -13,7 +13,6 @@ export const ENDPOINTS = {
   },
   OrganizationDashBoard: {
     Get: "/_layouts/15/Uranium.SmartObjectives.Sharepoint/OrganizationDashBoard.aspx/Get",
-
   },
   smartObjectives: {
     create: `_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/Create`,
@@ -27,14 +26,13 @@ export const ENDPOINTS = {
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/Update",
     quartersLog:
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetQuartersLog",
-    createAchievement:
-      "_api/web/lists/getbytitle('Achievement')/items",
-    getAchievement:
-      "_api/web/lists/getbytitle('Achievement')/items",
+    createAchievement: "_api/web/lists/getbytitle('Achievement')/items",
+    getAchievement: "_api/web/lists/getbytitle('Achievement')/items",
   },
   employee: {
     getAllEmployees: `lists/GetByTitle('Employees')/items?$select=EmployeeId,Employee/Title&$expand=Employee`,
-    getCertificates: "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetCertificates",
+    getCertificates:
+      "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/GetCertificates",
     // getAchievements: `lists/GetByTitle('Achievement')/items?$select=EmployeeId,Employee/Title&$expand=Employee`,
   },
   manager: {
@@ -63,13 +61,24 @@ export const ENDPOINTS = {
     downloadBulkTemplate: isDevOrTest
       ? "GetFileByServerRelativeUrl('/Documents/SOBulk.xlsx')/$value"
       : "GetFileByServerRelativeUrl('/hr/Documents/SOBulk.xlsx')/$value",
+    getUnSubmittedObjectives: ({ year, managerId, quarter }) => {
+      return isDevOrTest
+        ? `lists/GetByTitle('SmartObjectives')/items?$select=Id,Title,AssignedTo/Id,Employee/Id,Employee/Title,Year,Progress,AchievementStatus,OData__Status&$expand=AssignedTo,Employee&$filter=AssignedTo/Id eq ${managerId} and Year eq ${year} and Quarter eq ${quarter} and AchievementStatus eq 'NotSubmitted' and OData__Status eq 'InProgress'`
+        : `lists/GetByTitle('SmartObjectives')/items?$select=Id,Title,AssignedTo/Id,Employee/Id,Employee/Title,Year,Progress,AchievementStatus,OData__Status&$expand=AssignedTo,Employee&$filter=AssignedTo/Id eq ${managerId} and Year eq ${year} and Quarter eq ${quarter} and AchievementStatus eq 'NotSubmitted' and OData__Status eq 'InProgress'`;
+    },
+    closeQuarter:
+      "_layouts/15/Uranium.SmartObjectives.Sharepoint/SmartObjectives.aspx/AutoCloseUnsubmitted",
     uploadBulkExcel:
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/ManagerApprovals.aspx/UploadExcel",
   },
   hr: {
     get_departments: "lists/GetByTitle('Departments')/items?$select=Id,Title",
+    getDepartmentsAchiements:
+      "_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllGroupByDepartment",
     get_myCompanyEmployees:
       "_layouts/15/Uranium.SmartObjectives.Sharepoint/ManagerApprovals.aspx/GetEmployeesWithSmartObjectivesByDepartment",
+    getAllAchieversByDepartment:
+      "_layouts/15/Uranium.SmartObjectives.Sharepoint/Achievement.aspx/GetAllAchieversByDepartment",
   },
   system: {
     sendFeedback:

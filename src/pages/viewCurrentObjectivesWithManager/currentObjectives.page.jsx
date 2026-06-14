@@ -64,7 +64,7 @@ const CurrentObjectives = () => {
   const { year, quarter, quarterMonths } = getYearAndQuarter(
     undefined,
     quarterParam,
-    yearParam
+    yearParam,
   );
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ const CurrentObjectives = () => {
         pathname: location.pathname,
         search: searchParams.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -115,7 +115,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "detailsSO",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -164,7 +164,7 @@ const CurrentObjectives = () => {
           managerId: userData?.managerId || "",
           departmentId: userData?.departmentId || "",
         },
-      })
+      }),
     );
     handleBulkMenuClose();
   };
@@ -183,7 +183,7 @@ const CurrentObjectives = () => {
           dispatch(
             smartObjectiveApiSlice.util.invalidateTags([
               { type: "SmartObjectives", id: selectedRow.id },
-            ])
+            ]),
           );
         })
         .catch((error) => {
@@ -206,7 +206,7 @@ const CurrentObjectives = () => {
             handleMenuClose: handleMenuClose,
             ...selectedRow,
           },
-        })
+        }),
       );
     }
   };
@@ -224,7 +224,7 @@ const CurrentObjectives = () => {
           dispatch(
             smartObjectiveApiSlice.util.invalidateTags([
               { type: "SmartObjectives", id: selectedRow.id },
-            ])
+            ]),
           );
         })
         .catch((error) => {
@@ -247,7 +247,7 @@ const CurrentObjectives = () => {
             handleMenuClose: handleMenuClose,
             ...selectedRow,
           },
-        })
+        }),
       );
     }
   };
@@ -273,7 +273,7 @@ const CurrentObjectives = () => {
     },
     {
       skip: !employeeId,
-    }
+    },
   );
 
   const employeeOptions = team?.map((member) => {
@@ -339,7 +339,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "activeties",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -349,7 +349,7 @@ const CurrentObjectives = () => {
       showDrawer({
         drawerType: "certficatesLog",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -446,6 +446,7 @@ const CurrentObjectives = () => {
       type: "actions",
       headerName: "",
       width: 50,
+      cellClassName: "actionsCell",
       getActions: (params) => [
         <GridActionsCellItem
           icon={<GridMoreVertIcon />}
@@ -603,8 +604,8 @@ const CurrentObjectives = () => {
               error={
                 isObjectivesError
                   ? {
-                    message: "Error loading objectives. Please try again.",
-                  }
+                      message: "Error loading objectives. Please try again.",
+                    }
                   : null
               }
             />
@@ -619,46 +620,46 @@ const CurrentObjectives = () => {
                 userData,
                 "smartObjective",
                 "accept",
-                selectedRow
+                selectedRow,
               ) && (
-                  <>
-                    <MenuItem onClick={handleAccept} disabled={isAcceptLoading}>
-                      <div className={styles.itemText}>
-                        <span>Accept</span>
-                        {isAcceptLoading && <BtnLoader color={"main"} />}
-                      </div>
-                    </MenuItem>
-                    <MenuItem
-                      sx={{ color: "#EF3535 !important" }}
-                      onClick={handleIgnore}
-                      disabled={isIgnorLoading}
-                    >
-                      Ignore
-                    </MenuItem>
-                  </>
-                )}
+                <>
+                  <MenuItem onClick={handleAccept} disabled={isAcceptLoading}>
+                    <div className={styles.itemText}>
+                      <span>Accept</span>
+                      {isAcceptLoading && <BtnLoader color={"main"} />}
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{ color: "#EF3535 !important" }}
+                    onClick={handleIgnore}
+                    disabled={isIgnorLoading}
+                  >
+                    Ignore
+                  </MenuItem>
+                </>
+              )}
               {hasPermission(
                 userData,
                 "smartObjective",
                 "approve",
-                selectedRow
+                selectedRow,
               ) && (
-                  <>
-                    <MenuItem onClick={handleApprove} disabled={isApproveLoading}>
-                      <div className={styles.itemText}>
-                        <span>Approve</span>
-                        {isApproveLoading && <BtnLoader color={"main"} />}
-                      </div>
-                    </MenuItem>
-                    <MenuItem
-                      sx={{ color: "#EF3535 !important" }}
-                      onClick={handleReject}
-                      disabled={isRejecting}
-                    >
-                      Reject
-                    </MenuItem>
-                  </>
-                )}
+                <>
+                  <MenuItem onClick={handleApprove} disabled={isApproveLoading}>
+                    <div className={styles.itemText}>
+                      <span>Approve</span>
+                      {isApproveLoading && <BtnLoader color={"main"} />}
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{ color: "#EF3535 !important" }}
+                    onClick={handleReject}
+                    disabled={isRejecting}
+                  >
+                    Reject
+                  </MenuItem>
+                </>
+              )}
             </TableOptionsList>
           </Box>
         </>

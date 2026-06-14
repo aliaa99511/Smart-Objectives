@@ -1,4 +1,4 @@
-import { Typography, CircularProgress, Box } from "@mui/material";
+import { Typography, CircularProgress, Box, Button } from "@mui/material";
 import Widget from "../../components/general/widget/widget.component";
 import styles from "./myTeam.module.css";
 import { useGetMyTeamQuery } from "../../appState/apis/managerApprovalsSoApiSlice";
@@ -7,6 +7,8 @@ import { getYearAndQuarter } from "../../helpers/utilities/getYearAndQuarter";
 import TeamMemberCard from "../../components/myTeam/teamMemberCard/teamMemberCard.component";
 import MainLoader from "../../components/general/mainLoader/mainLoader.component";
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
+import { showModal } from "../../appState/slices/modalSlice";
+import { useDispatch } from "react-redux";
 
 const MyTeam = () => {
   const { year, quarter } = getYearAndQuarter();
@@ -16,12 +18,29 @@ const MyTeam = () => {
     isError,
     refetch,
   } = useGetMyTeamQuery({ year: year, quarter: quarter });
+  const dispatch = useDispatch();
 
   return (
     <Widget minHeight="calc(100vh - 20px)">
-      <Typography className={styles.title} variant="h6" fontWeight="bold">
-        My team
-      </Typography>
+      <div className={styles.header}>
+        <Typography className={styles.title} variant="h6" fontWeight="bold">
+          My team
+        </Typography>
+        <Button
+          onClick={() =>
+            dispatch(
+              showModal({
+                modalType: "closeQuarter",
+                modalSize: "sm",
+              }),
+            )
+          }
+          variant="outline"
+          className={styles.closeQuarterBtn}
+        >
+          Close quarter
+        </Button>
+      </div>
       {isLoading && <MainLoader height={"calc(100vh - 120px)"} />}
 
       {isError && (

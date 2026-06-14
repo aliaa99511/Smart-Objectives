@@ -53,7 +53,7 @@ const MyDepartment = () => {
         pathname: location.pathname,
         search: params.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -85,7 +85,7 @@ const MyDepartment = () => {
           pathname: location.pathname,
           search: params.toString(),
         },
-        { replace: true }
+        { replace: true },
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,7 +103,7 @@ const MyDepartment = () => {
       year: selectedYear,
       quarter: selectedQuarter,
     },
-    { skip: !userData?.departmentId }
+    { skip: !userData?.departmentId },
   );
 
   const handleYearChange = (event) => {
@@ -135,7 +135,7 @@ const MyDepartment = () => {
         state: {
           employeeId: selectedRow.id,
         },
-      }
+      },
     );
     handleMenuClose();
   };
@@ -145,7 +145,7 @@ const MyDepartment = () => {
       `/myDepartment/quarterLog?departmentId=${userData?.departmentId}&year=${selectedYear}`,
       {
         state: { employeeId: selectedRow.id },
-      }
+      },
     );
     handleMenuClose();
   };
@@ -155,7 +155,7 @@ const MyDepartment = () => {
       `/myDepartment/certificateWithDepartmentManager?departmentId=${userData?.departmentId}&year=${selectedYear}`,
       {
         state: { employeeId: selectedRow.id },
-      }
+      },
     );
     handleMenuClose();
   };
@@ -164,7 +164,7 @@ const MyDepartment = () => {
       `/myDepartment/createAchievementByDepartmentManager?departmentId=${userData?.departmentId}&year=${selectedYear}`,
       {
         state: { employeeId: selectedRow.id },
-      }
+      },
     );
     handleMenuClose();
   };
@@ -173,7 +173,7 @@ const MyDepartment = () => {
       `/myDepartment/achievementsWithDepartmentManager?departmentId=${userData?.departmentId}&year=${selectedYear}`,
       {
         state: { employeeId: selectedRow.id },
-      }
+      },
     );
     handleMenuClose();
   };
@@ -217,9 +217,10 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${SO_ATCHIVEMENT_STATUS["UnderReview"]?.txtColor ||
+            color: `${
+              SO_ATCHIVEMENT_STATUS["UnderReview"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-              }`,
+            }`,
           }}
         >
           {params.value}
@@ -236,9 +237,10 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${SO_ATCHIVEMENT_STATUS["Achieved"]?.txtColor ||
+            color: `${
+              SO_ATCHIVEMENT_STATUS["Achieved"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-              }`,
+            }`,
           }}
         >
           {params.value}
@@ -255,9 +257,10 @@ const MyDepartment = () => {
       renderCell: (params) => (
         <span
           style={{
-            color: `${SO_ATCHIVEMENT_STATUS["NotAchieved"]?.txtColor ||
+            color: `${
+              SO_ATCHIVEMENT_STATUS["NotAchieved"]?.txtColor ||
               SO_ATCHIVEMENT_STATUS["defaultStatus"]?.txtColor
-              }`,
+            }`,
           }}
         >
           {params.value}
@@ -280,6 +283,7 @@ const MyDepartment = () => {
       type: "actions",
       headerName: "",
       width: 50,
+      cellClassName: "actionsCell",
       getActions: (params) => [
         <GridActionsCellItem
           key={`actions-${params.id}`}
@@ -393,15 +397,18 @@ const MyDepartment = () => {
             error={
               isEmployeesError
                 ? {
-                  message:
-                    "Error loading department members. Please try again.",
-                }
+                    message:
+                      "Error loading department members. Please try again.",
+                  }
                 : null
             }
           />
 
           <TableOptionsList anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
-            <MenuItem className={styles.menuItem} onClick={handleCurrentObjectives}>
+            <MenuItem
+              className={styles.menuItem}
+              onClick={handleCurrentObjectives}
+            >
               Current Objectives
             </MenuItem>
             <MenuItem className={styles.menuItem} onClick={handleQuarterLog}>
@@ -410,7 +417,10 @@ const MyDepartment = () => {
             <MenuItem className={styles.menuItem} onClick={handleCertificate}>
               Certificate
             </MenuItem>
-            <MenuItem className={styles.menuItem} onClick={handleCreateAchievement}>
+            <MenuItem
+              className={styles.menuItem}
+              onClick={handleCreateAchievement}
+            >
               Create Achievement
             </MenuItem>
             <MenuItem className={styles.menuItem} onClick={handleAchievements}>

@@ -9,7 +9,7 @@ import {
 import Widget from "../../components/general/widget/widget.component";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./currentObjectives.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getYearAndQuarter } from "../../helpers/utilities/getYearAndQuarter";
 import { useGetTeamMemberSoQuery } from "../../appState/apis/managerApprovalsSoApiSlice";
 import AutoCompleteSelector from "../../components/general/autoCompleteSelector/autoCompleteSelector.component";
@@ -30,6 +30,8 @@ import { useGetMyCompanyEmployeesQuery } from "../../appState/apis/hrSoApiSlice"
 import TryAgain from "../../components/general/tryAgain/tryAgain.component";
 import achiveIcon from "../../assets/achiveIcon.svg";
 import { quarterOptions } from "../../settings/constants/options/quarterOptions";
+import useScrollRestoration from "../../hooks/useScrollRestoration";
+import { savePositionAndNavigate } from "../../hooks/navigationHelper";
 
 const CurrentObjectives = () => {
   const [selectedQuarter, setSelectedQuarter] = useState("");
@@ -42,7 +44,7 @@ const CurrentObjectives = () => {
   const { year, quarter, quarterMonths } = getYearAndQuarter(
     undefined,
     quarterParam,
-    yearParam
+    yearParam,
   );
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
@@ -56,7 +58,6 @@ const CurrentObjectives = () => {
     if (quarter) {
       setSelectedQuarter(Number(quarter));
     } else {
-      // Set current quarter as default in URL if not already there
       updateQuarterInUrl(selectedQuarter);
     }
   }, [location.search]);
@@ -69,13 +70,12 @@ const CurrentObjectives = () => {
         pathname: location.pathname,
         search: searchParams.toString(),
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
-  // Change this function
   const handleQuarterChange = (quarterId) => {
-    // Now directly receiving the ID instead of an event
+    saveScrollPosition();
     setSelectedQuarter(quarterId);
     updateQuarterInUrl(quarterId);
   };
@@ -92,11 +92,12 @@ const CurrentObjectives = () => {
   };
 
   const handleViewDetails = () => {
+    saveScrollPosition();
     dispatch(
       showDrawer({
         drawerType: "detailsSO",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -112,7 +113,7 @@ const CurrentObjectives = () => {
       year,
       quarter,
     },
-    { skip: !departmentId }
+    { skip: !departmentId },
   );
 
   // Fetch team member's smart objectives
@@ -130,66 +131,71 @@ const CurrentObjectives = () => {
     },
     {
       skip: !employeeId,
-    }
+    },
   );
 
-  const employeeOptions = companyEmployees?.map((member) => {
-    return {
+  // Use scroll restoration hook
+  const shouldRestore = !isObjectivesLoading && !isTeamMemberObjectivesFetching && teamMemberObjectives;
+  const { saveScrollPosition } = useScrollRestoration('currentObjectives', shouldRestore);
+
+  // Create sorted employee options by highest objectives (descending)
+  const employeeOptions = useMemo(() => {
+    if (!companyEmployees || companyEmployees.length === 0) return [];
+
+    // Sort by approveRequests (objectives) in descending order
+    const sortedEmployees = [...companyEmployees].sort((a, b) => {
+      const objectivesA = a.approveRequests || 0;
+      const objectivesB = b.approveRequests || 0;
+      return objectivesB - objectivesA; // Descending order (highest first)
+    });
+
+    // Map to the required format for AutoCompleteSelector
+    return sortedEmployees.map((member) => ({
       Id: member.id,
       Title: member.name,
-    };
-  });
+    }));
+  }, [companyEmployees]);
 
   // Get employeeId from location state or session storage for page refreshes
   useEffect(() => {
-    // First try to get from location state
     if (location.state?.employeeId) {
       setEmployeeId(location.state.employeeId);
-      // Store in session storage for page refreshes
       sessionStorage.setItem("currentEmployeeId", location.state.employeeId);
-
-      // Clear the location state after using it
       window.history.replaceState({}, document.title);
     } else {
-      // If not in state (e.g., after page refresh), try session storage
       const storedEmployeeId = sessionStorage.getItem("currentEmployeeId");
       if (storedEmployeeId) {
         setEmployeeId(storedEmployeeId);
       } else {
-        // If not found anywhere, redirect to myCompany
-        navigate("/myCompany");
+        savePositionAndNavigate('currentObjectives', navigate, "/myCompany");
       }
     }
   }, [location, navigate]);
 
-  // Handle employee selection from dropdown
   const handleEmployeeChange = (newEmployeeId) => {
-    // If the user clears the selection (makes it empty)
     if (!newEmployeeId) {
-      // Clear session storage
       sessionStorage.removeItem("currentEmployeeId");
-      // Redirect to myCompany page
-      navigate("/myCompany");
+      savePositionAndNavigate('currentObjectives', navigate, "/myCompany");
       return;
     }
 
+    saveScrollPosition();
     setEmployeeId(newEmployeeId);
     sessionStorage.setItem("currentEmployeeId", newEmployeeId);
-    // Ensure location state is cleared when manually selecting a new employee
     if (location.state?.employeeId) {
       window.history.replaceState({}, document.title);
     }
   };
 
-  // If no employeeId, don't render the component content
   if (!employeeId) return null;
 
   const handleCertficatesLog = (selectedRow) => {
+    saveScrollPosition();
     dispatch(
       showDrawer({
         drawerType: "certficatesLog",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -249,7 +255,6 @@ const CurrentObjectives = () => {
       renderCell: (params) => (
         <span className={styles.progressNumber}>{`${params.value}%`}</span>
       ),
-      // renderCell: (params) => <ProgressBarNumInside progress={params.value} />,
     },
     {
       field: "finalDiscission",
@@ -286,6 +291,7 @@ const CurrentObjectives = () => {
       type: "actions",
       headerName: "",
       width: 50,
+      cellClassName: "actionsCell",
       getActions: (params) => [
         <GridActionsCellItem
           icon={<GridMoreVertIcon />}
@@ -295,12 +301,14 @@ const CurrentObjectives = () => {
       ],
     },
   ];
+
   const handleViewActivitiesLog = () => {
+    saveScrollPosition();
     dispatch(
       showDrawer({
         drawerType: "activeties",
         drawerData: { id: selectedRow.id },
-      })
+      }),
     );
     handleMenuClose();
   };
@@ -329,7 +337,7 @@ const CurrentObjectives = () => {
               name={"quarter"}
               onSelectionChange={handleQuarterChange}
               initialValue={quarter}
-              disableClearable={true} // Prevent clearing the selection
+              disableClearable={true}
             />
           </div>
           <div className={styles.filter}>
@@ -343,7 +351,7 @@ const CurrentObjectives = () => {
                 useSessionStorage={true}
                 onSelectionChange={handleEmployeeChange}
                 initialValue={employeeId}
-                disableClearable={true} // Prevent clearing the selection
+                disableClearable={true}
               />
             ) : (
               <Skeleton variant="rectangular" fullwidth="true" height={48} />
@@ -399,8 +407,8 @@ const CurrentObjectives = () => {
               error={
                 isObjectivesError
                   ? {
-                      message: "Error loading objectives. Please try again.",
-                    }
+                    message: "Error loading objectives. Please try again.",
+                  }
                   : null
               }
             />

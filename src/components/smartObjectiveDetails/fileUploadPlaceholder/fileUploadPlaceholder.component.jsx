@@ -13,7 +13,7 @@ const FileUploadPlaceholder = ({ isError, selectedFile }) => {
           <span>or drag and drop</span>
         </div>
         <div className={styles.secondaryPlacehoder}>
-          <span>PNG, JPG or Pdf</span>
+          <span>PDF or image file (JPG, PNG)</span>
         </div>
         {selectedFile ? (
           <div className={styles.fileNameContainer}>

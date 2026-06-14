@@ -35,7 +35,7 @@ function AutoCompleteSelector({
   useEffect(() => {
     if (selectedSearchItemId) {
       const selectedItem = allSearchItems?.find(
-        (searchItem) => searchItem.Id == selectedSearchItemId
+        (searchItem) => searchItem.Id == selectedSearchItemId,
       );
       const getTitleForSelectedSearchItem = selectedItem?.Title;
       setValue(getTitleForSelectedSearchItem);

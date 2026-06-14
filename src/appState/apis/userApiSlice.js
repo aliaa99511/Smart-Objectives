@@ -45,9 +45,9 @@ export const userApiSlice = createApi({
         if (isCEO) {
           userRoles = ["CEO"];
           // CEO might also have other roles, add them if they exist
-          if (roles.length > 0 && roles[0] !== "CEO") {
+          /* if (roles.length > 0 && roles[0] !== "CEO") {
             userRoles = ["CEO", ...roles];
-          }
+          } */
         }
         else if (isEmployee) {
           userRoles = ["Employee"];
@@ -86,6 +86,7 @@ export const userApiSlice = createApi({
 });
 
 export const { useFetchCurrentUserQuery } = userApiSlice;
+
 
 
 

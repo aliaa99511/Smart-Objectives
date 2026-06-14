@@ -13,20 +13,24 @@ import { lazy, Suspense } from "react";
 import MainLoader from "../mainLoader/mainLoader.component";
 
 // Use lazy to create dynamically loaded components
-const SuccsessModalSO = lazy(() =>
-  import("../succsessModalSO/succsessModalSO.component")
+const SuccsessModalSO = lazy(
+  () => import("../succsessModalSO/succsessModalSO.component"),
 );
-const SuccsessAchievementSO = lazy(() =>
-  import("../succsessAchievementSO/succsessAchievementSO.component")
+const SuccsessAchievementSO = lazy(
+  () => import("../succsessAchievementSO/succsessAchievementSO.component"),
 );
-const IgnoreSoModal = lazy(() =>
-  import("../../currentObjectives/ignoreSoModal/ignoreSoModal.component")
+const IgnoreSoModal = lazy(
+  () => import("../../currentObjectives/ignoreSoModal/ignoreSoModal.component"),
 );
-const RejectSoModal = lazy(() =>
-  import("../../currentObjectives/rejectSoModal/rejectSoModal.component")
+const RejectSoModal = lazy(
+  () => import("../../currentObjectives/rejectSoModal/rejectSoModal.component"),
 );
-const UploadBulkModal = lazy(() =>
-  import("../../currentObjectives/uploadBulkModal/uploadBulkModal.component")
+const UploadBulkModal = lazy(
+  () =>
+    import("../../currentObjectives/uploadBulkModal/uploadBulkModal.component"),
+);
+const CloseQuarterModal = lazy(
+  () => import("../../myTeam/closeQuarterModal/closeQuarterModal.component"),
 );
 
 // Loading fallback component
@@ -59,6 +63,8 @@ const Modal = () => {
         return <RejectSoModal modalData={modalData} />;
       case "uploadBulk":
         return <UploadBulkModal modalData={modalData} />;
+      case "closeQuarter":
+        return <CloseQuarterModal modalData={modalData} />;
       default:
         return null;
     }
